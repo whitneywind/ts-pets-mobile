@@ -42,7 +42,7 @@ import {
           <TouchableOpacity
             style={tw`rounded-lg w-3/5 mx-auto rounded-full bg-emerald-500 py-3 mt-12`}
             onPress={() =>
-              navigation.navigate("Home")
+              navigation.navigate("GettingStarted")
             }
           >
             <Text style={tw`text-center text-2xl text-white font-bold`}>

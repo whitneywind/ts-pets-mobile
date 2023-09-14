@@ -5,6 +5,10 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { createNativeStackNavigator} from '@react-navigation/native-stack'
 import HomeScreen from './screens/HomeScreen';
 import LandingScreen from './screens/LandingScreen';
+import { Provider } from "react-redux";
+import { store, persistor } from './store';
+import { PersistGate } from "redux-persist/integration/react"
+import GettingStartedScreen from './screens/GettingStartedScreen';
 
 // type RootStackParamList = {
 //   Landing: string,
@@ -15,14 +19,19 @@ import LandingScreen from './screens/LandingScreen';
 export default function App() {
   const Stack = createNativeStackNavigator();
   return (
-    <NavigationContainer>
-      <SafeAreaProvider>
-        <Stack.Navigator initialRouteName="Landing">
-          <Stack.Screen name="Landing" component={LandingScreen} options={{ headerShown: false }} />
-          <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
-        </Stack.Navigator>
-      </SafeAreaProvider>
-    </NavigationContainer>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <NavigationContainer>
+          <SafeAreaProvider>
+            <Stack.Navigator initialRouteName="Landing">
+              <Stack.Screen name="Landing" component={LandingScreen} options={{ headerShown: false }} />
+              <Stack.Screen name="GettingStarted" component={GettingStartedScreen} options={{ headerShown: false }} />
+              <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
+            </Stack.Navigator>
+          </SafeAreaProvider>
+        </NavigationContainer>
+      </PersistGate>
+    </Provider>
   )
 }
 
