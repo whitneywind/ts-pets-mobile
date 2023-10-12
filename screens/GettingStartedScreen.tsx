@@ -11,7 +11,10 @@ import tw from "twrnc";
 import catImg from "../assets/images/graycat.png";
 import dogImg from "../assets/images/longdog.png";
 import { Formik, Field, ErrorMessage } from "formik";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Pet, PetData } from "../typings";
+import { setPetsArray, setCurrentPet } from "../slices/petsSlice";
 
 
   type Props = {
@@ -36,9 +39,51 @@ import { useState } from "react";
     },
   };
 
+
   const GettingStartedScreen = ({ navigation }: Props) => {
     const [selectedPet, setSelectedPet] = useState("");
     const [petGender, setPetGender] = useState("");
+    const dispatch = useDispatch();
+    const petsArray = useSelector((state: PetData) => state.petsArray);
+
+
+    const setPetData = async (values: any) => {
+
+        const uniqueId = new Date().getTime().toString() + Math.random().toString(36).substr(2, 9);
+
+        const newPet = {
+            ...defaultPetSettings,
+            id: uniqueId,
+            ...values
+        }
+
+        let newPetsArr: Pet[];
+
+        // check if petsArray already exists
+        if (!petsArray) {
+            newPetsArr = [];
+            console.log('it was empty')
+        } else {
+            newPetsArr = [...petsArray];
+        }
+
+        newPetsArr.push(newPet)
+        // add this pet to petsArray
+        // either way set new currentPet
+
+        console.log('before dispatching: ', newPetsArr)
+
+        try {
+            dispatch(setPetsArray(newPetsArr));
+            dispatch(setCurrentPet(newPet));
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    useEffect(() => {
+        console.log('petsArray:: ', petsArray);
+    }, [petsArray]);
 
     return (
       <SafeAreaView style={tw`h-full`}>
@@ -55,7 +100,7 @@ import { useState } from "react";
               avatar: "",
             }}
             onSubmit={(values) => {
-            //   setPetData(values);
+              setPetData(values);
               navigation.navigate("Home");
             }}
           >

@@ -1,18 +1,24 @@
 import { createSlice } from "@reduxjs/toolkit"
+import { Pet, PetData } from "../typings";
 
-const initialState = {
-    pets: [],
+const initialState: PetData = {
+    petsArray: [],
     currentPet: null,
 };
 
 export const petSlice = createSlice({
-    name: "pets",
+    name: "petsSlice",
     initialState,
     reducers: {
-        setPets: (state, action) => {
-            state.pets = action.payload;
+        setPetsArray: (state, action) => {
+            state.petsArray = action.payload;
           },
+        setCurrentPet: (state, action) => {
+            state.currentPet = action.payload;
+        },
     }
-})
+});
+
+export const { setPetsArray, setCurrentPet } = petSlice.actions;
 
 export default petSlice.reducer;

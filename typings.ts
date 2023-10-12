@@ -9,6 +9,7 @@ export interface Pet {
     petAgeYears?: string,
     petGender?: string,
     image?: string,
+    uri?: string,
     medicalInfo?: PetMedicalInfo,
     exerciseInfo?: PetExerciseInfo
 }
@@ -27,10 +28,8 @@ export interface PetExerciseInfo {
     allWalkData: WalkData[]
 }
 
-// also what the asyncstorage looks like
-export type PetData = Pet[];
-
-export type GlobalStateType = {
-    currentPet: Pet,
-    petData: PetData,
-}
+// what state should look like
+export type PetData = {
+    petsArray: Pet[] | [],
+    currentPet: Pet | null,
+};

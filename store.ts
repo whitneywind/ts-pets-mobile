@@ -9,19 +9,20 @@ import { persistStore, persistReducer, FLUSH,
     PURGE,
     REGISTER, } from "redux-persist"
 
+// the redux-persist library is used here as an efficient way of combining the state data and the data persisted to the async-storge
+// this improves upon the first draft app which manually pulled from and  saved to async-storage throughout the app usage
+
 // persist config
 const persistConfig = {
     key: "root",
     storage: AsyncStorage
 };
 
-// wrapping root reduceer with persistReducer
+// wrapping root reducer with persistReducer
 const persistedReducer = persistReducer(persistConfig, petsReducer);
 
 export const store = configureStore({
-    reducer: {
-        pets: persistedReducer,
-    },
+    reducer: persistedReducer,
     middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
