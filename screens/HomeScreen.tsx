@@ -9,6 +9,9 @@ import { Icon } from '@rneui/base';
 import tw from "twrnc";
 import dogImg from "../assets/images/germanshepherd.png";
 import catImg from "../assets/images/fluffycat.png";
+import NavOptions from '../components/NavOptions';
+import Reminders from '../components/Reminders';
+import PetsList from '../components/PetsList';
 
 type Props = {
   navigation: any;
@@ -76,13 +79,13 @@ function HomeScreen({ navigation }: Props) {
           />
         </TouchableOpacity>
       </View>
-      {/* <View>
+      <View>
         <NavOptions />
       </View>
       <View>
         <Reminders />
       </View>
-      <PetsList /> */}
+      <PetsList />
       <TouchableOpacity
         style={tw`bg-[#10B981] w-[89%] mx-auto rounded-xl py-2`}
         onPress={() => navigation.navigate("GettingStartedScreen")}
