@@ -13,7 +13,7 @@ const navData = [
     title: "Activity",
     icon: "paw",
     iconType: "font-awesome-5",
-    screen: "ActivityScreen",
+    screen: "Activity",
     color: "#10B981",
   },
   {
@@ -21,7 +21,7 @@ const navData = [
     title: "Details",
     icon: "info",
     iconType: "font-awesome-5",
-    screen: "DetailsScreen",
+    screen: "Details",
     color: "#10B981",
   },
   {
@@ -29,15 +29,15 @@ const navData = [
     title: "Photos",
     icon: "camera",
     iconType: "font-awesome-5",
-    screen: "DetailsScreen",
+    screen: "Details",
     color: "#10B981",
   },
   {
     id: "4",
-    title: "Call Vet",
+    title: "Health",
     icon: "heartbeat",
     iconType: "font-awesome-5",
-    screen: "DetailsScreen",
+    screen: "Health",
     color: "#10B981",
   },
 ];

@@ -11,20 +11,11 @@ const PetsList = ({ navigation }: any) => {
   const petData = useSelector((state: PetData) => state.petsArray);
   const currPet = useSelector((state: PetData) => state.currentPet);
 
-  // console.log(JSON.stringify(petData, null, 2));
-
   const dispatch = useDispatch();
 
   const handleSwitchPet = (id: string) => {
-    console.log("id we are using", id);
     if (currPet && currPet.id != id) {
       const newPetIndex = petData.findIndex((pet) => pet.id == id);
-      console.log(
-        "data we are looking to pick the curr from: ",
-        JSON.stringify(petData, null, 2)
-      );
-      console.log(newPetIndex);
-      console.log("trying to switch: ", petData[newPetIndex]);
       dispatch(setCurrentPet(petData[newPetIndex]));
     }
   };

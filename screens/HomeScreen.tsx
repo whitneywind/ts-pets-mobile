@@ -1,7 +1,5 @@
 import * as React from 'react';
-import { Button, View, Text, TouchableOpacity, Image } from 'react-native';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { useSelector } from 'react-redux';
 import { PetData } from '../typings';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -21,6 +19,13 @@ function HomeScreen({ navigation }: Props) {
   const petsArray = useSelector((state: PetData) => state.petsArray);
   const currentPet = useSelector((state: PetData) => state.currentPet);
   console.log('petsArray on homescreen: ', petsArray)
+
+  React.useEffect(() => {
+    // if upgrading to React Navigation 7.0 or higher, "any" below can be replaced by "NavigationRemoveEvent"
+    navigation.addListener('beforeRemove', (e: any) => {
+      e.preventDefault();
+    })
+  }, [navigation])
 
   if (!petsArray) {
     return (
@@ -80,10 +85,10 @@ function HomeScreen({ navigation }: Props) {
         </TouchableOpacity>
       </View>
       <View>
-        <NavOptions />
+        <NavOptions navigation={navigation} />
       </View>
       <View>
-        <Reminders />
+        <Reminders navigation={navigation} />
       </View>
       <PetsList />
       <TouchableOpacity
