@@ -12,6 +12,7 @@ import GettingStartedScreen from './screens/GettingStartedScreen';
 import DetailsScreen from './screens/DetailsScreen';
 import HealthScreen from './screens/HealthScreen';
 import ActivityScreen from './screens/ActivityScreen';
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
 // type RootStackParamList = {
 //   Landing: string,
@@ -25,16 +26,18 @@ export default function App() {
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <NavigationContainer>
-          <SafeAreaProvider>
-            <Stack.Navigator initialRouteName="Landing">
-              <Stack.Screen name="Landing" component={LandingScreen} options={{ headerShown: false }} />
-              <Stack.Screen name="GettingStarted" component={GettingStartedScreen} options={{ headerShown: false }} />
-              <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
-              <Stack.Screen name="Activity" component={ActivityScreen} options={{ headerShown: false }} />
-              <Stack.Screen name="Details" component={DetailsScreen} options={{ headerShown: false }} />
-              <Stack.Screen name="Health" component={HealthScreen} options={{ headerShown: false }} />
-            </Stack.Navigator>
-          </SafeAreaProvider>
+          <GestureHandlerRootView style={{ flex: 1 }}>
+            <SafeAreaProvider>
+              <Stack.Navigator initialRouteName="Landing">
+                <Stack.Screen name="Landing" component={LandingScreen} options={{ headerShown: false }} />
+                <Stack.Screen name="GettingStarted" component={GettingStartedScreen} options={{ headerShown: false }} />
+                <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
+                <Stack.Screen name="Activity" component={ActivityScreen} options={{ headerShown: false }} />
+                <Stack.Screen name="Details" component={DetailsScreen} options={{ headerShown: false }} />
+                <Stack.Screen name="Health" component={HealthScreen} options={{ headerShown: false }} />
+              </Stack.Navigator>
+            </SafeAreaProvider>
+          </GestureHandlerRootView>
         </NavigationContainer>
       </PersistGate>
     </Provider>

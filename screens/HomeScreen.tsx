@@ -10,6 +10,7 @@ import catImg from "../assets/images/fluffycat.png";
 import NavOptions from '../components/NavOptions';
 import Reminders from '../components/Reminders';
 import PetsList from '../components/PetsList';
+import { setCurrentPet } from '../slices/petsSlice';
 
 type Props = {
   navigation: any;
@@ -17,7 +18,7 @@ type Props = {
 
 function HomeScreen({ navigation }: Props) {
   const petsArray = useSelector((state: PetData) => state.petsArray);
-  const currentPet = useSelector((state: PetData) => state.currentPet);
+  let currentPet = useSelector((state: PetData) => state.currentPet);
   console.log('petsArray on homescreen: ', petsArray)
 
   React.useEffect(() => {
@@ -26,6 +27,10 @@ function HomeScreen({ navigation }: Props) {
       e.preventDefault();
     })
   }, [navigation])
+
+  // React.useEffect(() => {
+  //   setCurrentPet({ id: currentPet!.id, updatedDetails: {} })
+  // }, [petsArray])
 
   if (!petsArray) {
     return (
