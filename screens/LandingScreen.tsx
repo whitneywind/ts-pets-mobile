@@ -8,12 +8,16 @@ import {
   import Corgo from "../assets/images/corgo.png"
   import { Icon } from "@rneui/base";
   import tw from "twrnc";
+import { useSelector } from "react-redux";
+import { PetData } from "../typings";
 
   type Props = {
     navigation: any;
   }
   
   const LandingScreen = ({ navigation }: Props) => {
+    const petsArray = useSelector((state: PetData) => state.petsArray);
+
 
     return (
       <SafeAreaView style={tw`h-full`}>
@@ -41,9 +45,13 @@ import {
           </Text>
           <TouchableOpacity
             style={tw`rounded-lg w-3/5 mx-auto rounded-full bg-emerald-500 py-3 mt-12`}
-            onPress={() =>
-              navigation.navigate("GettingStarted")
-            }
+            onPress={() => {
+              if (petsArray && petsArray.length > 0) {
+                navigation.navigate("Home");
+              } else {
+                navigation.navigate("GettingStarted");
+              }
+            }}
           >
             <Text style={tw`text-center text-2xl text-white font-bold`}>
               Get Started

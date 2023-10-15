@@ -90,7 +90,7 @@ function HomeScreen({ navigation }: Props) {
       <View>
         <Reminders navigation={navigation} />
       </View>
-      <PetsList />
+      <PetsList navigation={navigation} />
       <TouchableOpacity
         style={tw`bg-[#10B981] w-[89%] mx-auto rounded-xl py-2`}
         onPress={() => navigation.navigate("GettingStartedScreen")}

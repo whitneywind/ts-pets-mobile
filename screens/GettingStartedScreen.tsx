@@ -10,7 +10,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import tw from "twrnc";
 import catImg from "../assets/images/graycat.png";
 import dogImg from "../assets/images/longdog.png";
-import { Formik, Field, ErrorMessage } from "formik";
+import { Formik } from "formik";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Pet, PetData } from "../typings";
@@ -114,7 +114,7 @@ import { setPetsArray, setCurrentPet } from "../slices/petsSlice";
               <View>
                 <Text style={tw`text-lg mt-4`}>What is your pet's name? *</Text>
                 <TextInput
-                  style={tw`border border-gray-300 p-2 mt-2 mb-6`}
+                  style={tw`border border-gray-300 p-2 mt-2 mb-4`}
                   onChangeText={handleChange("petName")}
                   onBlur={handleBlur("petName")}
                   value={values.petName}
@@ -123,7 +123,7 @@ import { setPetsArray, setCurrentPet } from "../slices/petsSlice";
                 <Text style={tw`text-lg mb-2`}>
                   What type of pet do you have? *
                 </Text>
-                <View style={tw`flex w-full flex-row justify-around mb-6`}>
+                <View style={tw`flex w-full flex-row justify-around mb-4`}>
                   <TouchableOpacity
                     onPress={() => {
                       setFieldValue("petType", "dog");
@@ -172,10 +172,10 @@ import { setPetsArray, setCurrentPet } from "../slices/petsSlice";
                     <Text style={tw`text-center`}>Cat</Text>
                   </TouchableOpacity>
                 </View>
-                <Text style={tw`text-lg mt-4`}>
+                <Text style={tw`text-lg`}>
                   How old is your pet? (optional)
                 </Text>
-                <View style={tw`flex-row items-center mb-6`}>
+                <View style={tw`flex-row items-center mb-4`}>
                   <TextInput
                     style={tw`border border-gray-300 p-2 mt-2 flex-1 text-center`}
                     onChangeText={handleChange("petAgeYears")}
@@ -186,7 +186,7 @@ import { setPetsArray, setCurrentPet } from "../slices/petsSlice";
                   />
                 </View>
   
-                <Text style={tw`text-lg mt-4`}>
+                <Text style={tw`text-lg mt-2`}>
                   What is your pet's gender? (optional)
                 </Text>
                 <View style={tw`flex-row mb-10 mt-2`}>
@@ -217,10 +217,20 @@ import { setPetsArray, setCurrentPet } from "../slices/petsSlice";
                 </View>
                 <TouchableOpacity
                   onPress={() => handleSubmit()}
-                  style={tw`rounded-full bg-emerald-500 py-4`}
+                  style={tw`rounded-full bg-emerald-500 py-4 mb-4`}
                 >
                   <Text style={tw`text-center text-white text-lg font-semibold`}>
                     Create Pet Profile
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.goBack();
+                  }}
+                  style={tw`rounded-full bg-slate-300 py-4`}
+                >
+                  <Text style={tw`text-center text-white text-lg font-semibold`}>
+                    Cancel
                   </Text>
                 </TouchableOpacity>
               </View>

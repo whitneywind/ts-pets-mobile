@@ -68,7 +68,7 @@ const PetsList = ({ navigation }: any) => {
         ListFooterComponent={() => (
           <TouchableOpacity
             style={tw`mt-8`}
-            onPress={() => navigation.navigate("GettingStartedScreen")}
+            onPress={() => navigation.navigate("GettingStarted")}
           >
             <Icon
               name="pluscircle"
