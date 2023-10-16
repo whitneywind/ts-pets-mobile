@@ -11,7 +11,6 @@ import { PersistGate } from "redux-persist/integration/react"
 import GettingStartedScreen from './screens/GettingStartedScreen';
 import DetailsScreen from './screens/DetailsScreen';
 import HealthScreen from './screens/HealthScreen';
-import ActivityScreen from './screens/ActivityScreen';
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
 // type RootStackParamList = {
@@ -32,7 +31,6 @@ export default function App() {
                 <Stack.Screen name="Landing" component={LandingScreen} options={{ headerShown: false }} />
                 <Stack.Screen name="GettingStarted" component={GettingStartedScreen} options={{ headerShown: false }} />
                 <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
-                <Stack.Screen name="Activity" component={ActivityScreen} options={{ headerShown: false }} />
                 <Stack.Screen name="Details" component={DetailsScreen} options={{ headerShown: false }} />
                 <Stack.Screen name="Health" component={HealthScreen} options={{ headerShown: false }} />
               </Stack.Navigator>

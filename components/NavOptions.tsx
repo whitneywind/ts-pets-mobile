@@ -10,18 +10,18 @@ import tw from "twrnc";
 const navData = [
   {
     id: "1",
-    title: "Activity",
+    title: "Details",
     icon: "paw",
     iconType: "font-awesome-5",
-    screen: "Activity",
+    screen: "Details",
     color: "#10B981",
   },
   {
     id: "2",
-    title: "Details",
-    icon: "info",
+    title: "Health",
+    icon: "heartbeat",
     iconType: "font-awesome-5",
-    screen: "Details",
+    screen: "Health",
     color: "#10B981",
   },
   {
@@ -34,10 +34,10 @@ const navData = [
   },
   {
     id: "4",
-    title: "Health",
-    icon: "heartbeat",
+    title: "Social",
+    icon: "dog",
     iconType: "font-awesome-5",
-    screen: "Health",
+    screen: "Details",
     color: "#10B981",
   },
 ];
