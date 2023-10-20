@@ -4,9 +4,9 @@ import { useSelector } from 'react-redux';
 import { PetData } from '../typings';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Icon } from '@rneui/base';
-import tw from "twrnc";
-import dogImg from "../assets/images/germanshepherd.png";
-import catImg from "../assets/images/fluffycat.png";
+import tw from 'twrnc';
+import dogImg from '../assets/images/germanshepherd.png';
+import catImg from '../assets/images/fluffycat.png';
 import NavOptions from '../components/NavOptions';
 import Reminders from '../components/Reminders';
 import PetsList from '../components/PetsList';
@@ -14,19 +14,20 @@ import { setCurrentPet } from '../slices/petsSlice';
 
 type Props = {
   navigation: any;
-}
+};
 
 function HomeScreen({ navigation }: Props) {
   const petsArray = useSelector((state: PetData) => state.petsArray);
   let currentPet = useSelector((state: PetData) => state.currentPet);
-  console.log('petsArray on homescreen: ', petsArray)
+  console.log('petsArray on homescreen: ', petsArray);
+  console.log('curr pet on home', currentPet?.petName)
 
   React.useEffect(() => {
     // if upgrading to React Navigation 7.0 or higher, "any" below can be replaced by "NavigationRemoveEvent"
     navigation.addListener('beforeRemove', (e: any) => {
       e.preventDefault();
-    })
-  }, [navigation])
+    });
+  }, [navigation]);
 
   // React.useEffect(() => {
   //   setCurrentPet({ id: currentPet!.id, updatedDetails: {} })
@@ -42,7 +43,7 @@ function HomeScreen({ navigation }: Props) {
           <Text style={tw`text-4xl text-center mt-16`}>Add a pet now</Text>
           <TouchableOpacity
             style={tw`mt-8`}
-            onPress={() => navigation.navigate("GettingStartedScreen")}
+            onPress={() => navigation.navigate('GettingStartedScreen')}
           >
             <Icon name="pluscircle" type="antdesign" size={70} color="gray" />
             <Text style={tw`text-white text-lg pt-4`}>Add New Pet</Text>
@@ -55,7 +56,7 @@ function HomeScreen({ navigation }: Props) {
   return (
     <SafeAreaView style={tw`h-full`}>
       <View style={tw`pt-1 mb-3 w-full`}>
-        <Icon name="dog" type="material-community" size={40} color={"black"} />
+        <Icon name="dog" type="material-community" size={40} color={'black'} />
       </View>
       <View
         style={tw`flex flex-row w-full items-center justify-around px-4 mb-3`}
@@ -65,24 +66,24 @@ function HomeScreen({ navigation }: Props) {
           <Text style={tw`text-xl text-gray-500`}>
             How is
             <Text style={tw`font-bold text-black`}>
-              {" "}
-              {currentPet ? currentPet.petName : "your pet"}{" "}
+              {' '}
+              {currentPet ? currentPet.petName : 'your pet'}{' '}
             </Text>
             today?
           </Text>
         </View>
-        <TouchableOpacity onPress={() => navigation.navigate("DetailsScreen")}>
+        <TouchableOpacity onPress={() => navigation.navigate('DetailsScreen')}>
           <Image
             style={{
               width: 100,
               height: 100,
-              resizeMode: "contain",
+              resizeMode: 'contain',
               borderRadius: 50,
             }}
             source={
               currentPet && currentPet.uri
                 ? { uri: currentPet.uri }
-                : currentPet!.petType === "dog"
+                : currentPet!.petType === 'dog'
                 ? dogImg
                 : catImg
             }
@@ -98,7 +99,7 @@ function HomeScreen({ navigation }: Props) {
       <PetsList navigation={navigation} />
       <TouchableOpacity
         style={tw`bg-[#10B981] w-[89%] mx-auto rounded-xl py-2`}
-        onPress={() => navigation.navigate("GettingStartedScreen")}
+        onPress={() => navigation.navigate('GettingStarted')}
       >
         <Text style={tw`text-white text-lg text-center font-semibold`}>
           Add Pet

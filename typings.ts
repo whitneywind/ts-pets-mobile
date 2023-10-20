@@ -10,8 +10,8 @@ export interface Pet {
     petGender?: string,
     image?: string,
     uri?: string,
+    weightData?: WeightData,
     medicalInfo?: PetMedicalInfo,
-    exerciseInfo?: PetExerciseInfo
 }
 
 export interface PetMedicalInfo {
@@ -20,13 +20,13 @@ export interface PetMedicalInfo {
     medications?: string, 
 }
 
-export type WalkData = [walkDate: string, walkTime: string]
+export type WeightData = [date: string, weight: string]
 
-export interface PetExerciseInfo {
-    dailyWalkGoal: string,
-    walkingStreak: string,
-    allWalkData: WalkData[]
-}
+// export interface PetExerciseInfo {
+//     dailyWalkGoal: string,
+//     walkingStreak: string,
+//     allWalkData: WalkData[]
+// }
 
 // what state should look like
 export type PetData = {

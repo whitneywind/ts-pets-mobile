@@ -1,4 +1,4 @@
-import { Icon } from "@rneui/base";
+import { Icon } from '@rneui/base';
 import {
   SafeAreaView,
   ScrollView,
@@ -6,34 +6,31 @@ import {
   View,
   Image,
   TouchableOpacity,
-} from "react-native";
-import tw from "twrnc";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
-import { TextInput } from "react-native-gesture-handler";
-import {
-  setCurrentPet, updateOnePet
-} from "../slices/petsSlice";
-import * as ImagePicker from "expo-image-picker";
-import dogImg from "../assets/images/germanshepherd.png";
-import catImg from "../assets/images/fluffycat.png";
-import { PetData } from "../typings";
+} from 'react-native';
+import tw from 'twrnc';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { TextInput } from 'react-native-gesture-handler';
+import { setCurrentPet, updateOnePet, deleteOnePet } from '../slices/petsSlice';
+import * as ImagePicker from 'expo-image-picker';
+import dogImg from '../assets/images/germanshepherd.png';
+import catImg from '../assets/images/fluffycat.png';
+import { PetData } from '../typings';
 
 type Props = {
-    navigation: any;
-}
+  navigation: any;
+};
 
 // TO-DO: image not updating immediately bc image is not coming from the petsArray, but the currentPet
-    // this is why it only updates immediately in the PetsList component
-
+// this is why it only updates immediately in the PetsList component
 
 const DetailsScreen = ({ navigation }: Props) => {
-    const petsArray = useSelector((state: PetData) => state.petsArray);
-    const currentPet = useSelector((state: PetData) => state.currentPet);
+  const petsArray = useSelector((state: PetData) => state.petsArray);
+  const currentPet = useSelector((state: PetData) => state.currentPet);
 
-    if (!currentPet) {
-        navigation.navigate("GettingStarted");
-    }
+  if (!currentPet) {
+    navigation.navigate('GettingStarted');
+  }
 
   const dispatch = useDispatch();
 
@@ -49,29 +46,37 @@ const DetailsScreen = ({ navigation }: Props) => {
 
   const handleSaveChanges = async () => {
     const updatedPetDetails = {
+      ...currentPet,
       petName,
       breed,
       weight,
       petAgeYears,
       gender,
-      microchip,
-      ...currentPet
-      // uri???
+      microchip
     };
 
-    dispatch(setCurrentPet(updatedPetDetails));
-    dispatch(updateOnePet({ 
-        petId: currentPet!.id,
-        updatedDetails: updatedPetDetails
-    }));
+    console.log('updatetdpetdettails: ', updatedPetDetails)
+
+    dispatch(
+        updateOnePet({
+          petId: currentPet!.id,
+          updatedDetails: updatedPetDetails,
+        })
+      );
+      dispatch(
+        setCurrentPet({
+          ...currentPet,
+          ...updatedPetDetails,
+        })
+      );
 
     setEditMode(false);
   };
 
   // test that state updated correctly
   useEffect(() => {
-    console.log("currentPet:", currentPet!.petName);
-    console.log("pet data length: ", petsArray.length);
+    console.log('currentPet:', currentPet!.petName);
+    console.log('pet data length: ', petsArray.length);
   }, [currentPet, petsArray]);
 
   const [image, setImage] = useState<string | null>(null);
@@ -96,32 +101,38 @@ const DetailsScreen = ({ navigation }: Props) => {
       };
 
       // update in state
-      dispatch(updateOnePet({
-        petId: currentPet!.id,
-        updatedDetails: currentPetWithPicture
-      }));
-      dispatch(setCurrentPet({
-        ...currentPet,
-        ...currentPetWithPicture
-    }))
+      dispatch(
+        updateOnePet({
+          petId: currentPet!.id,
+          updatedDetails: currentPetWithPicture,
+        })
+      );
+      dispatch(
+        setCurrentPet({
+          ...currentPet,
+          ...currentPetWithPicture,
+        })
+      );
     }
   };
 
-//   const handleDelete = async () => {
-//     dispatch(deleteOnePet({ petId: currentPet.id }));
+  // deletes from array but current pet not updating
+const handleDelete = async () => {
+    console.log('deleting this id: ', currentPet!.id)
+    dispatch(deleteOnePet({ petId: currentPet!.id }));
 
-//     // delete from storage - TODO: should be able to update storage using updated state
-//     const storage = await AsyncStorage.getItem("petData");
-//     const parsedStorage = JSON.parse(storage);
-//     const updatedStorage = parsedStorage.filter(
-//       (pet) => pet.id !== currentPet!.id
-//     );
-//     await AsyncStorage.setItem("petData", JSON.stringify(updatedStorage));
+      function updateCurr() {
+        if (petsArray.length === 0) {
+            dispatch(setCurrentPet(null));
+            navigation.navigate("GettingStarted");
+        } else {
+            dispatch(setCurrentPet(petsArray[0]));
+            navigation.navigate("Home");
+        }
+    }  
 
-//     dispatch(setCurrentPet(petData[petData.length - 1]));
-
-//     navigation.navigate("LandingScreen");
-//   };
+      setTimeout(updateCurr, 500);
+};
 
   return (
     <SafeAreaView style={tw`h-full`}>
@@ -153,7 +164,7 @@ const DetailsScreen = ({ navigation }: Props) => {
                 {
                   width: 180,
                   height: 170,
-                  resizeMode: "cover",
+                  resizeMode: 'cover',
                   borderRadius: 6,
                 },
                 tw`self-center m-2`,
@@ -161,7 +172,7 @@ const DetailsScreen = ({ navigation }: Props) => {
               source={
                 currentPet!.uri
                   ? { uri: currentPet!.uri }
-                  : currentPet!.avatar === "dog"
+                  : currentPet!.avatar === 'dog'
                   ? dogImg
                   : catImg
               }
@@ -192,8 +203,8 @@ const DetailsScreen = ({ navigation }: Props) => {
               <Text style={tw`text-lg p-1`}>Age:</Text>
               {!editMode ? (
                 <Text style={tw`text-lg p-1`}>
-                  {currentPet!.petAgeYears === "unknown"
-                    ? "---"
+                  {currentPet!.petAgeYears === 'unknown'
+                    ? '---'
                     : currentPet!.petAgeYears}
                 </Text>
               ) : (
@@ -209,7 +220,7 @@ const DetailsScreen = ({ navigation }: Props) => {
               <Text style={tw`text-lg p-1`}>Breed:</Text>
               {!editMode ? (
                 <Text style={tw`text-lg p-1`}>
-                  {currentPet!.breed === "unknown" ? "---" : currentPet!.breed}
+                  {currentPet!.breed === 'unknown' ? '---' : currentPet!.breed}
                 </Text>
               ) : (
                 <TextInput
@@ -225,7 +236,9 @@ const DetailsScreen = ({ navigation }: Props) => {
               </Text>
               {!editMode ? (
                 <Text style={tw`text-lg p-1`}>
-                  {currentPet!.weight === "unknown" ? "---" : currentPet!.weight}
+                  {currentPet!.weight === 'unknown'
+                    ? '---'
+                    : currentPet!.weight}
                 </Text>
               ) : (
                 <TextInput
@@ -239,7 +252,9 @@ const DetailsScreen = ({ navigation }: Props) => {
               <Text style={tw`text-lg p-1`}>Gender:</Text>
               {!editMode ? (
                 <Text style={tw`text-lg p-1`}>
-                  {currentPet!.petGender === "unknown" ? "---" : currentPet!.petGender}
+                  {currentPet!.petGender === 'unknown'
+                    ? '---'
+                    : currentPet!.petGender}
                 </Text>
               ) : (
                 <TextInput
@@ -255,8 +270,8 @@ const DetailsScreen = ({ navigation }: Props) => {
               </Text>
               {!editMode ? (
                 <Text style={tw`text-lg p-1`}>
-                  {currentPet!.microchip === "unknown"
-                    ? "---"
+                  {currentPet!.microchip === 'unknown'
+                    ? '---'
                     : currentPet!.microchip}
                 </Text>
               ) : (
@@ -297,7 +312,7 @@ const DetailsScreen = ({ navigation }: Props) => {
             Activity Log
           </Text>
           <TouchableOpacity
-            onPress={() => navigation.navigate("ActivityScreen")}
+            onPress={() => navigation.navigate('ActivityScreen')}
           >
             <View style={tw`bg-emerald-400 rounded-lg py-2 w-1/3 my-2 mx-auto`}>
               <Icon
@@ -314,11 +329,11 @@ const DetailsScreen = ({ navigation }: Props) => {
           <Text style={tw`text-2xl text-center font-bold p-1`}>
             Remove Pet Data
           </Text>
-          {/* <TouchableOpacity onPress={handleDelete}>
+          <TouchableOpacity onPress={handleDelete}>
             <View style={tw`bg-red-400 rounded-lg py-2 w-1/3 my-2 mx-auto`}>
               <Icon name="warning" type="antdesign" size={25} style={tw``} />
             </View>
-          </TouchableOpacity> */}
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </SafeAreaView>

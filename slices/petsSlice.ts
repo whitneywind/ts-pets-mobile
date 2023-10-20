@@ -21,10 +21,16 @@ export const petSlice = createSlice({
             state.petsArray = state.petsArray.map((pet) => {
                 return pet.id === petId ? { ...pet, ...updatedDetails } : pet
             });
-        }
+        },
+        deleteOnePet: (state, action) => {
+            const { petId } = action.payload;
+            state.petsArray = state.petsArray.filter((pet) => {
+                return pet.id !== petId;
+            })
+        },
     }
 });
 
-export const { setPetsArray, setCurrentPet, updateOnePet } = petSlice.actions;
+export const { setPetsArray, setCurrentPet, updateOnePet, deleteOnePet } = petSlice.actions;
 
 export default petSlice.reducer;
