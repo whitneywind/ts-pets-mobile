@@ -18,6 +18,14 @@ const navData = [
   },
   {
     id: "2",
+    title: "Walks",
+    icon: "dog",
+    iconType: "font-awesome-5",
+    screen: "Walk",
+    color: "#10B981",
+  },
+  {
+    id: "3",
     title: "Health",
     icon: "heartbeat",
     iconType: "font-awesome-5",
@@ -25,17 +33,9 @@ const navData = [
     color: "#10B981",
   },
   {
-    id: "3",
+    id: "4",
     title: "Photos",
     icon: "camera",
-    iconType: "font-awesome-5",
-    screen: "Details",
-    color: "#10B981",
-  },
-  {
-    id: "4",
-    title: "Social",
-    icon: "dog",
     iconType: "font-awesome-5",
     screen: "Details",
     color: "#10B981",

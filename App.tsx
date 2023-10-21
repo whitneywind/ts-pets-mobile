@@ -1,5 +1,3 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { createNativeStackNavigator} from '@react-navigation/native-stack'
@@ -12,6 +10,7 @@ import GettingStartedScreen from './screens/GettingStartedScreen';
 import DetailsScreen from './screens/DetailsScreen';
 import HealthScreen from './screens/HealthScreen';
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import WalkScreen from './screens/WalkScreen';
 
 // type RootStackParamList = {
 //   Landing: string,
@@ -32,6 +31,7 @@ export default function App() {
                 <Stack.Screen name="GettingStarted" component={GettingStartedScreen} options={{ headerShown: false }} />
                 <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
                 <Stack.Screen name="Details" component={DetailsScreen} options={{ headerShown: false }} />
+                <Stack.Screen name="Walk" component={WalkScreen} options={{ headerShown: false }} />
                 <Stack.Screen name="Health" component={HealthScreen} options={{ headerShown: false }} />
               </Stack.Navigator>
             </SafeAreaProvider>

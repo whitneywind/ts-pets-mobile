@@ -16,20 +16,20 @@ import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { Formik } from 'formik';
 import { Picker } from '@react-native-picker/picker';
-import WeightChart from '../components/WeightChart';
+import WalkChart from '../components/WalkChart';
 import { PetData } from '../typings';
 
 type Props = {
   navigation: any;
 };
 
-const HealthScreen = ({ navigation }: Props) => {
+const WalkScreen = ({ navigation }: Props) => {
   const currentPet = useSelector((state: PetData) => state.currentPet);
-//   const weightData = [1, 2, 3, 4, 5];
+  // const walkData = [1, 2, 3, 4, 5];
 
-  const [weightModalOpen, setWeightModalOpen] = useState(false);
-  const [weightData, setWeightData] = useState([0, 0, 0, 0, 0, 0, 0]);
-  const [weightGoal, setWeightGoal] = useState(30);
+  const [walkModalOpen, setWalkModalOpen] = useState(false);
+  const [walkData, setWalkData] = useState([0, 0, 0, 0, 0, 0, 0]);
+  const [walkGoal, setWalkGoal] = useState(30);
   const [streak, setStreak] = useState(0);
 
   const handleSubmit = async (values: any) => {
@@ -59,21 +59,21 @@ const HealthScreen = ({ navigation }: Props) => {
     return (
       <Formik
         initialValues={{
-          weightDate: '1',
-          weight: '0',
+          walkDate: '1',
+          walkLength: '0',
         }}
         onSubmit={(values) => {
           handleSubmit(values);
-          setWeightModalOpen(!weightModalOpen);
+          setWalkModalOpen(!walkModalOpen);
         }}
       >
         {({ handleChange, handleBlur, handleSubmit, values }) => (
           <View>
-            <Text style={tw`text-lg mt-4 text-center`}>Date</Text>
+            <Text style={tw`text-lg mt-4 text-center`}>Day</Text>
             <Picker
               style={tw`border border-gray-300 mt-2`}
-              selectedValue={values.weightDate}
-              onValueChange={handleChange('weightDate')}
+              selectedValue={values.walkDate}
+              onValueChange={handleChange('walkDate')}
             >
               {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sunday'].map(
                 (label, index) => (
@@ -85,13 +85,13 @@ const HealthScreen = ({ navigation }: Props) => {
                 )
               )}
             </Picker>
-            <Text style={tw`text-lg mt-4 text-center`}>Weight (lbs)</Text>
+            <Text style={tw`text-lg mt-4 text-center`}>Duration (min)</Text>
             <View style={tw`flex-row items-center mb-6`}>
               <TextInput
                 style={tw`border border-gray-300 text-xl pb-4 pt-2 mt-2 flex-1 text-center`}
-                onChangeText={handleChange('weight')}
-                onBlur={handleBlur('weight')}
-                value={values.weight}
+                onChangeText={handleChange('walkLength')}
+                onBlur={handleBlur('walkLength')}
+                value={values.walkLength}
                 placeholder="20"
                 keyboardType="numeric"
               />
@@ -101,7 +101,7 @@ const HealthScreen = ({ navigation }: Props) => {
               // onPress={handleSubmit}
             >
               <Text style={tw`text-white font-bold text-center text-lg`}>
-                Submit New Weight
+                Submit Walk
               </Text>
             </TouchableOpacity>
           </View>
@@ -109,6 +109,7 @@ const HealthScreen = ({ navigation }: Props) => {
       </Formik>
     );
   };
+
   return (
     <SafeAreaView style={tw` h-full`}>
       <ScrollView style={tw`w-[89%] mx-auto`}>
@@ -116,7 +117,7 @@ const HealthScreen = ({ navigation }: Props) => {
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Icon name="arrowleft" type="antdesign" size={25} style={tw``} />
           </TouchableOpacity>
-          <Text style={tw`text-xl font-semibold pr-2`}>Weight (in lbs)</Text>
+          <Text style={tw`text-xl font-semibold pr-2`}>Activity</Text>
           <Icon name="more-vertical" type="feather" size={25} style={tw``} />
         </View>
 
@@ -134,18 +135,18 @@ const HealthScreen = ({ navigation }: Props) => {
               {currentPet!.petName}
             </Text>
             <View style={tw`flex-row justify-between w-5/6`}>
-              <Text style={tw`text-lg p-1`}>Weight Goal:</Text>
-              <Text style={tw`text-lg p-1`}>30 lbs</Text>
+              <Text style={tw`text-lg p-1`}>Walk Goal:</Text>
+              <Text style={tw`text-lg p-1`}>30 min</Text>
             </View>
 
             <TouchableOpacity
-              onPress={() => setWeightModalOpen(!weightModalOpen)}
-              style={tw`flex-row justify-between w-5/6 bg-[#a457f0] rounded-lg py-2`}
+              onPress={() => setWalkModalOpen(!walkModalOpen)}
+              style={tw`flex-row justify-between w-5/6 bg-[#53A2FF] rounded-lg py-2`}
             >
               <Text
                 style={tw`text-lg font-bold text-white text-right w-full text-center p-1`}
               >
-                Update Weight
+                Add New Walk
               </Text>
             </TouchableOpacity>
           </View>
@@ -154,10 +155,10 @@ const HealthScreen = ({ navigation }: Props) => {
         <Modal
           animationType="slide"
           transparent={true}
-          visible={weightModalOpen}
+          visible={walkModalOpen}
           onRequestClose={() => {
             //   Alert.alert("Modal has been closed.");
-            setWeightModalOpen(!weightModalOpen);
+            setWalkModalOpen(!walkModalOpen);
           }}
         >
           {/* <TouchableWithoutFeedback
@@ -170,7 +171,7 @@ const HealthScreen = ({ navigation }: Props) => {
             >
               <TouchableOpacity
                 style={tw`absolute right-4 top-2`}
-                onPress={() => setWeightModalOpen(false)}
+                onPress={() => setWalkModalOpen(false)}
               >
                 <View>
                   <Icon
@@ -184,7 +185,7 @@ const HealthScreen = ({ navigation }: Props) => {
               <Text
                 style={tw`text-center text-2xl font-semibold text-slate-800`}
               >
-                New Weight
+                New Walk
               </Text>
               {/* <Formik
                   initialValues={{
@@ -246,9 +247,9 @@ const HealthScreen = ({ navigation }: Props) => {
           {/* </TouchableWithoutFeedback> */}
         </Modal>
 
-        {weightData !== undefined && (
+        {walkData !== undefined && (
           <View style={tw`w-full mx-auto bg-white rounded-lg mb-5`}>
-            <WeightChart weightData={weightData} />
+            <WalkChart walkData={walkData} />
           </View>
         )}
 
@@ -257,7 +258,7 @@ const HealthScreen = ({ navigation }: Props) => {
             Back to Homepage
           </Text>
           <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-            <View style={tw`bg-[#a85cf5] rounded-lg py-2 w-1/3 mt-1 mx-auto`}>
+            <View style={tw`bg-[#53A2FF] rounded-lg py-2 w-1/3 mt-1 mx-auto`}>
               <Icon
                 name="arrow-right-circle"
                 type="feather"
@@ -278,4 +279,4 @@ const HealthScreen = ({ navigation }: Props) => {
     </SafeAreaView>
   );
 };
-export default HealthScreen;
+export default WalkScreen;

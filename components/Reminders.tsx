@@ -7,7 +7,7 @@ const Reminders = ({ navigation }: any) => {
   return (
     <View style={[tw`w-[89%] mx-auto rounded-xl mb-10`]}>
       <TouchableOpacity
-        onPress={() => navigation.navigate("Landing")}
+        onPress={() => navigation.navigate("Health")}
         style={tw`flex flex-row justify-between bg-[#6FD5B3] rounded-xl items-center pl-3 pr-6 py-4 mb-4`}
       >
         <View style={tw`w-[70%]`}>
@@ -25,7 +25,7 @@ const Reminders = ({ navigation }: any) => {
         <Icon name="calendar" type="antdesign" color="white" size={45} />
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => navigation.navigate("Health")}
+        onPress={() => navigation.navigate("Walk")}
         style={tw`flex flex-row justify-between bg-[#53A2FF] rounded-xl items-center pl-3 pr-6 py-4`}
       >
         <View style={tw`w-[70%]`}>
