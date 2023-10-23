@@ -121,15 +121,29 @@ const HealthScreen = ({ navigation }: Props) => {
         </View>
 
         <View style={tw`w-full mx-auto pb-3 bg-white rounded-lg mb-5`}>
+          <Text style={tw`text-xl text-center font-bold p-1 pt-2 underline`}>
+            Medical
+          </Text>
           <View style={tw`flex items-center gap-y-2`}>
-            <Image
-              source={LongDog}
-              style={{
-                width: 230,
-                height: 100,
-                resizeMode: 'cover',
-              }}
-            />
+            <View style={tw`flex-row justify-between w-5/6`}>
+              <Text style={tw`text-lg p-1`}>Last Vet Visit:</Text>
+              <Text style={tw`text-lg p-1`}>3/12/2023</Text>
+            </View>
+            <View style={tw`flex-row justify-between w-5/6`}>
+              <Text style={tw`text-lg text-right text-gray-700 p-1`}>
+                Allergies
+              </Text>
+              <Text style={tw`text-lg text-right text-gray-700 p-1`}>none</Text>
+            </View>
+            <View style={tw`flex-row justify-between w-5/6`}>
+              <Text style={tw`text-lg p-1`}>Medications:</Text>
+              <Text style={tw`text-lg p-1`}>none</Text>
+            </View>
+          </View>
+        </View>
+
+        <View style={tw`w-full mx-auto pb-3 bg-white rounded-lg mb-5`}>
+          <View style={tw`flex items-center gap-y-2`}>
             <Text style={tw`text-2xl text-center p-1 font-bold underline`}>
               {currentPet!.petName}
             </Text>
