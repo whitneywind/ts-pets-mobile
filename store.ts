@@ -10,7 +10,7 @@ import { persistStore, persistReducer, FLUSH,
     REGISTER, } from "redux-persist"
 
 // the redux-persist library is used here as an efficient way of combining the state data and the data persisted to the async-storge
-// this improves upon the first draft app which manually pulled from and  saved to async-storage throughout the app usage
+// this is animprovement compared to the first draft app which manually pulled from and  saved to async-storage throughout the app usage
 
 // persist config
 const persistConfig = {

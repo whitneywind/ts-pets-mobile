@@ -11,7 +11,6 @@ import {
   Keyboard,
 } from 'react-native';
 import tw from 'twrnc';
-import LongDog from '../assets/images/longdog.png';
 import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { Formik } from 'formik';
@@ -116,7 +115,7 @@ const HealthScreen = ({ navigation }: Props) => {
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Icon name="arrowleft" type="antdesign" size={25} style={tw``} />
           </TouchableOpacity>
-          <Text style={tw`text-xl font-semibold pr-2`}>Weight (in lbs)</Text>
+          <Text style={tw`text-xl font-semibold pr-2`}>Health</Text>
           <Icon name="more-vertical" type="feather" size={25} style={tw``} />
         </View>
 
@@ -148,7 +147,7 @@ const HealthScreen = ({ navigation }: Props) => {
               {currentPet!.petName}
             </Text>
             <View style={tw`flex-row justify-between w-5/6`}>
-              <Text style={tw`text-lg p-1`}>Weight Goal:</Text>
+              <Text style={tw`text-lg p-1`}>Current Weight:</Text>
               <Text style={tw`text-lg p-1`}>30 lbs</Text>
             </View>
 

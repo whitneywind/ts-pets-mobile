@@ -10,6 +10,7 @@ export interface Pet {
     petGender?: string,
     image?: string,
     uri?: string,
+    walkData?: WalkData,
     weightData?: WeightData,
     medicalInfo?: PetMedicalInfo,
 }
@@ -20,7 +21,9 @@ export interface PetMedicalInfo {
     medications?: string, 
 }
 
-export type WeightData = [date: string, weight: string]
+export type WeightData = [date: string, weight: string];
+
+export type WalkData = [walkDate: string, walkLength: string]
 
 // export interface PetExerciseInfo {
 //     dailyWalkGoal: string,
