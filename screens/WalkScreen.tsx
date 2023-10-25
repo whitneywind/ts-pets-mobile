@@ -15,7 +15,6 @@ import LongDog from '../assets/images/longdog.png';
 import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { Formik } from 'formik';
-import { Picker } from '@react-native-picker/picker';
 import WalkChart from '../components/WalkChart';
 import { PetData } from '../typings';
 import { Calendar } from 'react-native-calendars';
@@ -26,15 +25,39 @@ type Props = {
 
 const WalkScreen = ({ navigation }: Props) => {
   const currentPet = useSelector((state: PetData) => state.currentPet);
+  const currentPetWalkData = currentPet!.walkData;
+
+  const lastSevenDates: string[] = [];
+  const [dataFromLastSevenDates, setDataFromLastSevenDates] = useState([50, 0, 0, 0, 0, 0, 0]);
 
   const [walkModalOpen, setWalkModalOpen] = useState(false);
-
-  const [walkData, setWalkData] = useState([0, 0, 0, 0, 0, 0, 0]);
   const [selectedDate, setSelectedDate] = useState('');
 
+  for (let i = 7; i > 0; i--) {
+    const currentDate = new Date();
+    currentDate.setDate(currentDate.getDate() - i + 1); // Update the date in each iteration
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+    const day = String(currentDate.getDate()).padStart(2, '0');
+    const formattedDate = `${year}-${month}-${day}`;
+    lastSevenDates.push(formattedDate);
 
-  const handleSubmit = async (values: any) => {
-    console.log('entry values: ', values)
+      // get data for this date if it exists
+      if (!currentPetWalkData) {
+        continue;
+      } else if (currentPetWalkData[formattedDate]) {
+        dataFromLastSevenDates[i] = parseInt(currentPetWalkData[formattedDate]);
+      }
+  }
+
+  const handleSubmit = (values: any) => {
+    let currentIndex = lastSevenDates.indexOf(values['walkDate']);
+    if (currentIndex >= 0) {
+      dataFromLastSevenDates[currentIndex] = parseInt(values.walkLength);
+    }
+    setDataFromLastSevenDates([...dataFromLastSevenDates]);
+
+    // update state as well
   };
 
   const renderForm = () => {
@@ -172,9 +195,9 @@ const WalkScreen = ({ navigation }: Props) => {
           {/* </TouchableWithoutFeedback> */}
         </Modal>
 
-        {walkData !== undefined && (
+        {lastSevenDates !== undefined && (
           <View style={tw`w-full mx-auto bg-white rounded-lg mb-5`}>
-            <WalkChart walkData={walkData} />
+            <WalkChart lastSevenDates={lastSevenDates} dataFromLastSevenDates={dataFromLastSevenDates} />
           </View>
         )}
 

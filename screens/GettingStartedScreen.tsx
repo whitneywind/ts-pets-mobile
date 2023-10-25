@@ -32,9 +32,7 @@ let defaultPetSettings = {
     medications: 'unknown',
   },
   petExerciseInfo: {
-    dailyWalkGoal: '25',
-    walkingStreak: '0',
-    allWalkData: [],
+    walkData: {},
   },
 };
 

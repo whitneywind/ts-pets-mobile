@@ -2,8 +2,7 @@ import { View, Dimensions, Text } from "react-native";
 import { LineChart } from "react-native-chart-kit";
 import tw from "twrnc";
 
-const WalkChart = ({ navigation, walkData }: any) => {
-  // data will consist of the last 7 entries (walkTimes only for now)
+const WalkChart = ({ lastSevenDates, dataFromLastSevenDates }: any) => {
   
   return (
     <View style={tw`bg-[#53A2FF] rounded-lg py-2`}>
@@ -12,10 +11,10 @@ const WalkChart = ({ navigation, walkData }: any) => {
       </Text>
       <LineChart
         data={{
-          labels: ["M", "T", "W", "Th", "F", "S", "Su"],
+          labels: lastSevenDates.map((date: string) => date.slice(5)),
           datasets: [
             {
-              data: walkData,
+              data: dataFromLastSevenDates,
             },
           ],
         }}
