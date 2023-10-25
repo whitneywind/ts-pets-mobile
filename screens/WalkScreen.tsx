@@ -12,30 +12,34 @@ import {
 } from 'react-native';
 import tw from 'twrnc';
 import LongDog from '../assets/images/longdog.png';
-import { useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useState } from 'react';
 import { Formik } from 'formik';
 import WalkChart from '../components/WalkChart';
-import { PetData } from '../typings';
+import { PetData, WalkData } from '../typings';
 import { Calendar } from 'react-native-calendars';
+import { updateOnePet, setCurrentPet } from '../slices/petsSlice';
 
 type Props = {
   navigation: any;
 };
 
 const WalkScreen = ({ navigation }: Props) => {
+  const dispatch = useDispatch();
+
   const currentPet = useSelector((state: PetData) => state.currentPet);
   const currentPetWalkData = currentPet!.walkData;
+  const copyOfWalkData = { ...currentPetWalkData};
 
   const lastSevenDates: string[] = [];
-  const [dataFromLastSevenDates, setDataFromLastSevenDates] = useState([50, 0, 0, 0, 0, 0, 0]);
+  const dataFromLastSevenDates = [0, 0, 0, 0, 0, 0, 0];
 
   const [walkModalOpen, setWalkModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState('');
 
-  for (let i = 7; i > 0; i--) {
+  for (let i = 7, j = 0; i > 0; i--, j++) {
     const currentDate = new Date();
-    currentDate.setDate(currentDate.getDate() - i + 1); // Update the date in each iteration
+    currentDate.setDate(currentDate.getDate() - i + 1);
     const year = currentDate.getFullYear();
     const month = String(currentDate.getMonth() + 1).padStart(2, '0');
     const day = String(currentDate.getDate()).padStart(2, '0');
@@ -46,7 +50,7 @@ const WalkScreen = ({ navigation }: Props) => {
       if (!currentPetWalkData) {
         continue;
       } else if (currentPetWalkData[formattedDate]) {
-        dataFromLastSevenDates[i] = parseInt(currentPetWalkData[formattedDate]);
+        dataFromLastSevenDates[j] = parseInt(currentPetWalkData[formattedDate]);
       }
   }
 
@@ -55,9 +59,33 @@ const WalkScreen = ({ navigation }: Props) => {
     if (currentIndex >= 0) {
       dataFromLastSevenDates[currentIndex] = parseInt(values.walkLength);
     }
-    setDataFromLastSevenDates([...dataFromLastSevenDates]);
 
     // update state as well
+    const newWalkData = { ...copyOfWalkData};
+    const petId = currentPet?.id;
+    console.log('existing walk data: ', copyOfWalkData);
+    console.log('id: ', petId)
+    if (newWalkData && petId) {
+      console.log('trying to update state')
+      console.log('new walk data before adding', newWalkData)
+      newWalkData[values['walkDate']] = values.walkLength;
+      console.log('newWalkData after adding: ', newWalkData)
+      const updatedDetails = {
+        walkData: newWalkData
+      }
+      dispatch(
+        updateOnePet({
+          petId,
+          updatedDetails,
+        })
+      );
+      dispatch(
+        setCurrentPet({
+          ...currentPet,
+          ...updatedDetails,
+        })
+      );
+    }
   };
 
   const renderForm = () => {
