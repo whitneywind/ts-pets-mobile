@@ -29,9 +29,9 @@ const DetailsScreen = ({ navigation }: Props) => {
   const petsArray = useSelector((state: PetData) => state.petsArray);
   const currentPet = useSelector((state: PetData) => state.currentPet);
 
-  if (!currentPet || petsArray.length === 0) {
-    navigation.navigate('GettingStarted');
-  }
+  // if (!currentPet || petsArray.length === 0) {
+  //   navigation.navigate('GettingStarted');
+  // }
 
   const dispatch = useDispatch();
 
@@ -130,11 +130,14 @@ const handleDelete = () => {
       // TO-DO: why is it only able too navigate Home and not to any other page??? also it only seems to do the else statement
         // dispatch(setCurrentPet(petsArray[0]));
         if (petsArray.length >= 1) {
-          dispatch(setCurrentPet(0));
+          console.log('trying to go to home')
+          dispatch(setCurrentPet(petsArray[0]));
+          navigation.navigate("Home");
         } else {
+          console.log('trying to go to getting started')
           dispatch(setCurrentPet(null));
+          navigation.navigate("GettingStarted");
         }
-        navigation.navigate("Home");
     }
 
       // setTimeout(updateCurr, 500);
