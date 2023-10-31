@@ -31,7 +31,8 @@ let defaultPetSettings = {
     allergies: 'unknown',
     medications: 'unknown',
   },
-  walkData: {}
+  walkData: {},
+  weightData: {},
 };
 
 const GettingStartedScreen = ({ navigation }: Props) => {

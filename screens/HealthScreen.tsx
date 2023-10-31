@@ -4,61 +4,91 @@ import {
   ScrollView,
   Text,
   View,
-  Image,
   TouchableOpacity,
   Modal,
   TextInput,
-  Keyboard,
 } from 'react-native';
 import tw from 'twrnc';
-import { useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useState } from 'react';
 import { Formik } from 'formik';
-import { Picker } from '@react-native-picker/picker';
 import WeightChart from '../components/WeightChart';
-import { PetData } from '../typings';
+import { PetData, WeightData } from '../typings';
+import { setCurrentPet, updateOnePet } from '../slices/petsSlice';
 
 type Props = {
   navigation: any;
 };
 
 const HealthScreen = ({ navigation }: Props) => {
+  const dispatch = useDispatch();
+
   const currentPet = useSelector((state: PetData) => state.currentPet);
-//   const weightData = [1, 2, 3, 4, 5];
+  const currentPetWeightData = currentPet?.weightData;
+  console.log('weeight data is a Map: ', currentPetWeightData instanceof Map)
+  // let currentPetWeightData: Map<string, string>;
+  // currentPetWeightData = new Map<string, string>([...currentPet!.weightData]);
+
+  const lastSevenDates: string[] = [];
+  const dataFromLastSevenDates: number[] = [];
 
   const [weightModalOpen, setWeightModalOpen] = useState(false);
-  const [weightData, setWeightData] = useState([0, 0, 0, 0, 0, 0, 0]);
-  const [weightGoal, setWeightGoal] = useState(30);
-  const [streak, setStreak] = useState(0);
 
-  const handleSubmit = async (values: any) => {
-    console.log('handle submit fn: ', values);
+  const currentDate = new Date();
 
-    if (!currentPet) {
-      console.log('currentPet is undefined');
-      return;
+  currentDate.setDate(currentDate.getDate() + 1);
+  const year = currentDate.getFullYear();
+  const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+  const day = String(currentDate.getDate()).padStart(2, '0');
+  const formattedDate = `${year}-${month}-${day}`;
+
+  // update to get only if exist
+  // for (let i = Math.min(7, currentPetWeightData!.size), j = 0; i > 0; i--, j++) {
+  //   lastSevenDates.push(formattedDate);
+
+  //     // get data for this date if it exists
+  //     if (!currentPetWeightData) {
+  //       continue;
+  //     } else if (currentPetWeightData.has(formattedDate)) {
+  //       const walkingTime = parseInt(currentPetWeightData.get(formattedDate));
+  //       dataFromLastSevenDates[j] = walkingTime;
+  //     }
+  // }
+
+
+  const handleSubmit = (values: any) => {
+    let currentIndex = lastSevenDates.indexOf(values['weightDate']);
+    if (currentIndex >= 0) {
+      dataFromLastSevenDates[currentIndex] = parseInt(values.walkLength);
     }
 
-    // const newData = [...walkData];
-    // const dayIndex = parseInt(values.walkDate);
-    // console.log(dayIndex);
-    // newData[dayIndex] = parseInt(values.walkLength);
-    // setWalkData(newData);
-
-    // console.log("Updated walkData:", walkData);
-
-    // const petWalkInfo = {
-    //   allWalkData: walkData,
-    //   dailyWalkGoal: walkGoal,
-    //   walkStreak: streak,
-    // };
+    // update state as well
+    const petId = currentPet?.id;
+    if (currentPetWeightData && petId) {
+      // currentPetWeightData.set(values['weightDate'], values.weight);
+      const updatedDetails = {
+        weightData: currentPetWeightData
+      }
+      // dispatch(
+      //   updateOnePet({
+      //     petId,
+      //     updatedDetails,
+      //   })
+      // );
+      // dispatch(
+      //   setCurrentPet({
+      //     ...currentPet,
+      //     ...updatedDetails,
+      //   })
+      // );
+    }
   };
 
   const renderForm = () => {
     return (
       <Formik
         initialValues={{
-          weightDate: '1',
+          weightDate: formattedDate,
           weight: '0',
         }}
         onSubmit={(values) => {
@@ -68,22 +98,6 @@ const HealthScreen = ({ navigation }: Props) => {
       >
         {({ handleChange, handleBlur, handleSubmit, values }) => (
           <View>
-            <Text style={tw`text-lg mt-4 text-center`}>Date</Text>
-            <Picker
-              style={tw`border border-gray-300 mt-2`}
-              selectedValue={values.weightDate}
-              onValueChange={handleChange('weightDate')}
-            >
-              {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sunday'].map(
-                (label, index) => (
-                  <Picker.Item
-                    key={index}
-                    label={label}
-                    value={index.toString()}
-                  />
-                )
-              )}
-            </Picker>
             <Text style={tw`text-lg mt-4 text-center`}>Weight (lbs)</Text>
             <View style={tw`flex-row items-center mb-6`}>
               <TextInput
@@ -199,69 +213,15 @@ const HealthScreen = ({ navigation }: Props) => {
               >
                 New Weight
               </Text>
-              {/* <Formik
-                  initialValues={{
-                    walkDate: "1",
-                    walkLength: "0",
-                  }}
-                  onSubmit={(values) => {
-                    handleSubmit(values);
-                    setWalkModalOpen(!walkModalOpen);
-                  }}
-                >
-                  {({ handleChange, handleBlur, handleSubmit, values }) => (
-                    <View>
-                      <Text style={tw`text-lg mt-4 text-center`}>Day</Text>
-                      <Picker
-                        style={tw`border border-gray-300 mt-2`}
-                        selectedValue={values.walkDate}
-                        onValueChange={handleChange("walkDate")}
-                      >
-                        {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sunday"].map(
-                          (label, index) => (
-                            <Picker.Item
-                              key={index}
-                              label={label}
-                              value={index.toString()}
-                            />
-                          )
-                        )}
-                      </Picker>
-                      <Text style={tw`text-lg mt-4 text-center`}>
-                        Duration (min)
-                      </Text>
-                      <View style={tw`flex-row items-center mb-6`}>
-                        <TextInput
-                          style={tw`border border-gray-300 text-xl pb-4 pt-2 mt-2 flex-1 text-center`}
-                          onChangeText={handleChange("walkLength")}
-                          onBlur={handleBlur("walkLength")}
-                          value={values.walkLength}
-                          placeholder="20"
-                          keyboardType="numeric"
-                        />
-                      </View>
-                      <TouchableOpacity
-                        style={tw`rounded-xl bg-[#53A2FF] px-3 py-2`}
-                        onPress={handleSubmit}
-                      >
-                        <Text
-                          style={tw`text-white font-bold text-center text-lg`}
-                        >
-                          Submit Walk
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
-                  )}
-                </Formik> */}
+              
               {renderForm()}
             </View>
           </View>
-          {/* </TouchableWithoutFeedback> */}
         </Modal>
 
-        {weightData !== undefined && (
+        {currentPetWeightData !== undefined && (
           <View style={tw`w-full mx-auto bg-white rounded-lg mb-5`}>
-            <WeightChart weightData={weightData} />
+            <WeightChart currentPetWeightData={currentPetWeightData} />
           </View>
         )}
 

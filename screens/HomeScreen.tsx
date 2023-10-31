@@ -10,7 +10,6 @@ import catImg from '../assets/images/fluffycat.png';
 import NavOptions from '../components/NavOptions';
 import Reminders from '../components/Reminders';
 import PetsList from '../components/PetsList';
-import { setCurrentPet } from '../slices/petsSlice';
 
 type Props = {
   navigation: any;
@@ -20,6 +19,7 @@ function HomeScreen({ navigation }: Props) {
   const petsArray = useSelector((state: PetData) => state.petsArray);
   let currentPet = useSelector((state: PetData) => state.currentPet);
   console.log('petsArray on homescreen: ', JSON.stringify(petsArray[petsArray.length - 1], null, 2));
+  console.log('current pet', currentPet)
   // console.log('curr pet on home', currentPet?.petName)
 
   React.useEffect(() => {
@@ -27,11 +27,11 @@ function HomeScreen({ navigation }: Props) {
     navigation.addListener('beforeRemove', (e: any) => {
       e.preventDefault();
     });
-  }, [navigation]);
 
-  // React.useEffect(() => {
-  //   setCurrentPet({ id: currentPet!.id, updatedDetails: {} })
-  // }, [petsArray])
+    if (petsArray.length === 0) {
+      navigation.navigate("GettingStarted");
+    }
+  }, [navigation]);
 
   if (!petsArray) {
     return (
@@ -43,7 +43,7 @@ function HomeScreen({ navigation }: Props) {
           <Text style={tw`text-4xl text-center mt-16`}>Add a pet now</Text>
           <TouchableOpacity
             style={tw`mt-8`}
-            onPress={() => navigation.navigate('GettingStartedScreen')}
+            onPress={() => navigation.navigate('GettingStarted')}
           >
             <Icon name="pluscircle" type="antdesign" size={70} color="gray" />
             <Text style={tw`text-white text-lg pt-4`}>Add New Pet</Text>

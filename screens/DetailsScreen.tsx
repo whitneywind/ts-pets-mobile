@@ -16,6 +16,7 @@ import * as ImagePicker from 'expo-image-picker';
 import dogImg from '../assets/images/germanshepherd.png';
 import catImg from '../assets/images/fluffycat.png';
 import { PetData } from '../typings';
+import { current } from '@reduxjs/toolkit';
 
 type Props = {
   navigation: any;
@@ -28,7 +29,7 @@ const DetailsScreen = ({ navigation }: Props) => {
   const petsArray = useSelector((state: PetData) => state.petsArray);
   const currentPet = useSelector((state: PetData) => state.currentPet);
 
-  if (!currentPet) {
+  if (!currentPet || petsArray.length === 0) {
     navigation.navigate('GettingStarted');
   }
 
@@ -77,6 +78,7 @@ const DetailsScreen = ({ navigation }: Props) => {
   useEffect(() => {
     console.log('currentPet:', currentPet!.petName);
     console.log('pet data length: ', petsArray.length);
+
   }, [currentPet, petsArray]);
 
   const [image, setImage] = useState<string | null>(null);
@@ -117,22 +119,36 @@ const DetailsScreen = ({ navigation }: Props) => {
   };
 
   // deletes from array but current pet not updating
-const handleDelete = async () => {
+const handleDelete = () => {
     console.log('deleting this id: ', currentPet!.id)
     dispatch(deleteOnePet({ petId: currentPet!.id }));
-
-      function updateCurr() {
-        if (petsArray.length === 0) {
+  
+    if (!petsArray || petsArray.length < 1) {
             dispatch(setCurrentPet(null));
             navigation.navigate("GettingStarted");
+    } else {
+      // TO-DO: why is it only able too navigate Home and not to any other page??? also it only seems to do the else statement
+        // dispatch(setCurrentPet(petsArray[0]));
+        if (petsArray.length >= 1) {
+          dispatch(setCurrentPet(0));
         } else {
-            dispatch(setCurrentPet(petsArray[0]));
-            navigation.navigate("Home");
+          dispatch(setCurrentPet(null));
         }
-    }  
+        navigation.navigate("Home");
+    }
 
-      setTimeout(updateCurr, 500);
+      // setTimeout(updateCurr, 500);
 };
+
+if (!currentPet) {
+  return (
+    <SafeAreaView>
+      <View>
+        <Text>no pet data</Text>
+      </View>
+    </SafeAreaView>
+  )
+}
 
   return (
     <SafeAreaView style={tw`h-full`}>

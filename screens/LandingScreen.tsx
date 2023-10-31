@@ -8,15 +8,25 @@ import {
 import Corgo from '../assets/images/corgo.png';
 import { Icon } from '@rneui/base';
 import tw from 'twrnc';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { PetData } from '../typings';
+import { setCurrentPet } from '../slices/petsSlice';
+import { useEffect } from 'react';
 
 type Props = {
   navigation: any;
 };
 
 const LandingScreen = ({ navigation }: Props) => {
+  const dispatch = useDispatch();
   const petsArray = useSelector((state: PetData) => state.petsArray);
+
+  useEffect(() => {
+    if (petsArray && petsArray.length > 0) {
+      dispatch(setCurrentPet(petsArray[petsArray.length - 1]));
+    }
+  }, []);
+  
 
   return (
     <SafeAreaView style={tw`h-full`}>

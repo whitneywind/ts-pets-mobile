@@ -2,7 +2,7 @@ import { View, Dimensions, Text } from "react-native";
 import { LineChart } from "react-native-chart-kit";
 import tw from "twrnc";
 
-const WeightChart = ({ navigation, weightData }: any) => {
+const WeightChart = ({ navigation, currentPetWeightData }: any) => {
   // data will consist of the last 7 entries (walkTimes only for now)
   
   return (
@@ -15,7 +15,7 @@ const WeightChart = ({ navigation, weightData }: any) => {
           labels: ["M", "T", "W", "Th", "F", "S", "Su"],
           datasets: [
             {
-              data: weightData,
+              data: [0, 0, 0, 0, 0, 0, 0],
             },
           ],
         }}

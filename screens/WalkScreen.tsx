@@ -8,15 +8,14 @@ import {
   TouchableOpacity,
   Modal,
   TextInput,
-  Keyboard,
 } from 'react-native';
 import tw from 'twrnc';
 import LongDog from '../assets/images/longdog.png';
 import { useDispatch, useSelector } from 'react-redux';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Formik } from 'formik';
 import WalkChart from '../components/WalkChart';
-import { PetData, WalkData } from '../typings';
+import { PetData } from '../typings';
 import { Calendar } from 'react-native-calendars';
 import { updateOnePet, setCurrentPet } from '../slices/petsSlice';
 
@@ -28,8 +27,7 @@ const WalkScreen = ({ navigation }: Props) => {
   const dispatch = useDispatch();
 
   const currentPet = useSelector((state: PetData) => state.currentPet);
-  const currentPetWalkData = currentPet!.walkData;
-  const copyOfWalkData = { ...currentPetWalkData};
+  const currentPetWalkData = { ...currentPet!.walkData };
 
   const lastSevenDates: string[] = [];
   const dataFromLastSevenDates = [0, 0, 0, 0, 0, 0, 0];
@@ -50,9 +48,26 @@ const WalkScreen = ({ navigation }: Props) => {
       if (!currentPetWalkData) {
         continue;
       } else if (currentPetWalkData[formattedDate]) {
-        dataFromLastSevenDates[j] = parseInt(currentPetWalkData[formattedDate]);
+        const walkingTime = parseInt(currentPetWalkData[formattedDate]);
+        dataFromLastSevenDates[j] = walkingTime;
       }
   }
+
+  let walkingAvg = Math.floor(dataFromLastSevenDates.reduce((acc, curr) => {
+    return acc + curr;
+  }, 0) / 7)
+
+  const getAvg = () => {
+    let avg = dataFromLastSevenDates.reduce((acc, curr) => {
+      return acc + curr;
+    }, 0);
+    walkingAvg = Math.floor(avg / 7);
+  }
+
+  useEffect(() => {
+    getAvg();
+  }, []);
+
 
   const handleSubmit = (values: any) => {
     let currentIndex = lastSevenDates.indexOf(values['walkDate']);
@@ -61,15 +76,10 @@ const WalkScreen = ({ navigation }: Props) => {
     }
 
     // update state as well
-    const newWalkData = { ...copyOfWalkData};
+    const newWalkData = { ...currentPetWalkData};
     const petId = currentPet?.id;
-    console.log('existing walk data: ', copyOfWalkData);
-    console.log('id: ', petId)
     if (newWalkData && petId) {
-      console.log('trying to update state')
-      console.log('new walk data before adding', newWalkData)
       newWalkData[values['walkDate']] = values.walkLength;
-      console.log('newWalkData after adding: ', newWalkData)
       const updatedDetails = {
         walkData: newWalkData
       }
@@ -86,6 +96,7 @@ const WalkScreen = ({ navigation }: Props) => {
         })
       );
     }
+    getAvg();
   };
 
   const renderForm = () => {
@@ -161,11 +172,13 @@ const WalkScreen = ({ navigation }: Props) => {
             <Text style={tw`text-2xl text-center p-1 font-bold underline`}>
               {currentPet!.petName}
             </Text>
-            {/* <View style={tw`flex-row justify-between w-5/6`}>
-              <Text style={tw`text-lg p-1`}>Walk Goal:</Text>
-              <Text style={tw`text-lg p-1`}>30 min</Text>
-              // this week's average walking time
-            </View> */}
+            <View style={tw`flex-row justify-between w-5/6`}>
+              <Text style={tw`text-xl p-1 `}>Weekly Average:</Text>
+              <Text style={tw`text-xl p-1 font-bold`}>
+                {walkingAvg}
+                <Text style={tw`font-normal`}> min</Text>
+                </Text>
+            </View>
 
             <TouchableOpacity
               onPress={() => setWalkModalOpen(!walkModalOpen)}
