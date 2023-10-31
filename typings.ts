@@ -25,7 +25,8 @@ export type WalkData = {
     [walkDate: string]: string
 }
 
-export type WeightData = { [weightDate: string]: string
+export type WeightData = {  
+    [weightDate: string]: string
 };
 
 // what state should look like

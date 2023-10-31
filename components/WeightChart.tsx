@@ -2,7 +2,7 @@ import { View, Dimensions, Text } from "react-native";
 import { LineChart } from "react-native-chart-kit";
 import tw from "twrnc";
 
-const WeightChart = ({ navigation, currentPetWeightData }: any) => {
+const WeightChart = ({ weightsFromLastFiveDates, lastFiveDates }: any) => {
   // data will consist of the last 7 entries (walkTimes only for now)
   
   return (
@@ -12,16 +12,16 @@ const WeightChart = ({ navigation, currentPetWeightData }: any) => {
       </Text>
       <LineChart
         data={{
-          labels: ["M", "T", "W", "Th", "F", "S", "Su"],
+          labels: lastFiveDates.map((date: string) => date.slice(5)),
           datasets: [
             {
-              data: [0, 0, 0, 0, 0, 0, 0],
+              data: weightsFromLastFiveDates,
             },
           ],
         }}
         width={Dimensions.get("window").width} // from react-native
         height={250}
-        yAxisSuffix="m"
+        yAxisSuffix="lb"
         yAxisInterval={1} // optional, defaults to 1
         chartConfig={{
           //   backgroundColor: "#f7f0fd",

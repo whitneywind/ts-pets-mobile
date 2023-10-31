@@ -24,63 +24,59 @@ const HealthScreen = ({ navigation }: Props) => {
   const dispatch = useDispatch();
 
   const currentPet = useSelector((state: PetData) => state.currentPet);
-  const currentPetWeightData = currentPet?.weightData;
-  console.log('weeight data is a Map: ', currentPetWeightData instanceof Map)
-  // let currentPetWeightData: Map<string, string>;
-  // currentPetWeightData = new Map<string, string>([...currentPet!.weightData]);
+  const currentPetWeightData = { ...currentPet!.weightData };
 
-  const lastSevenDates: string[] = [];
-  const dataFromLastSevenDates: number[] = [];
+
+  const lastFiveDates: string[] = [];
+  const weightsFromLastFiveDates: number[] = [0, 0, 0, 0];
 
   const [weightModalOpen, setWeightModalOpen] = useState(false);
 
   const currentDate = new Date();
 
-  currentDate.setDate(currentDate.getDate() + 1);
+  currentDate.setDate(currentDate.getDate());
   const year = currentDate.getFullYear();
   const month = String(currentDate.getMonth() + 1).padStart(2, '0');
   const day = String(currentDate.getDate()).padStart(2, '0');
   const formattedDate = `${year}-${month}-${day}`;
 
   // update to get only if exist
-  // for (let i = Math.min(7, currentPetWeightData!.size), j = 0; i > 0; i--, j++) {
-  //   lastSevenDates.push(formattedDate);
+  if (currentPetWeightData) {
+    let dates = Object.keys(currentPetWeightData).sort().slice(-5);
 
-  //     // get data for this date if it exists
-  //     if (!currentPetWeightData) {
-  //       continue;
-  //     } else if (currentPetWeightData.has(formattedDate)) {
-  //       const walkingTime = parseInt(currentPetWeightData.get(formattedDate));
-  //       dataFromLastSevenDates[j] = walkingTime;
-  //     }
-  // }
+    for (let date of dates) {
+      lastFiveDates.shift();
+      lastFiveDates.push(date);
+      weightsFromLastFiveDates.push(Number(currentPetWeightData[date]));
+    }
+  }
 
 
   const handleSubmit = (values: any) => {
-    let currentIndex = lastSevenDates.indexOf(values['weightDate']);
-    if (currentIndex >= 0) {
-      dataFromLastSevenDates[currentIndex] = parseInt(values.walkLength);
-    }
+    console.log('valuese', values);
+    currentPetWeightData[values.weightDate] = values.weight;
+
 
     // update state as well
     const petId = currentPet?.id;
     if (currentPetWeightData && petId) {
       // currentPetWeightData.set(values['weightDate'], values.weight);
       const updatedDetails = {
-        weightData: currentPetWeightData
+        weightData: currentPetWeightData,
+        weight: values.weight,
       }
-      // dispatch(
-      //   updateOnePet({
-      //     petId,
-      //     updatedDetails,
-      //   })
-      // );
-      // dispatch(
-      //   setCurrentPet({
-      //     ...currentPet,
-      //     ...updatedDetails,
-      //   })
-      // );
+      dispatch(
+        updateOnePet({
+          petId,
+          updatedDetails,
+        })
+      );
+      dispatch(
+        setCurrentPet({
+          ...currentPet,
+          ...updatedDetails,
+        })
+      );
     }
   };
 
@@ -110,11 +106,11 @@ const HealthScreen = ({ navigation }: Props) => {
               />
             </View>
             <TouchableOpacity
-              style={tw`rounded-xl bg-[#53A2FF] px-3 py-2`}
-              // onPress={handleSubmit}
+              style={tw`rounded-xl bg-[#a457f0] p-2 px-8`}
+              onPress={() => handleSubmit()}
             >
               <Text style={tw`text-white font-bold text-center text-lg`}>
-                Submit New Weight
+                Submit
               </Text>
             </TouchableOpacity>
           </View>
@@ -122,6 +118,7 @@ const HealthScreen = ({ navigation }: Props) => {
       </Formik>
     );
   };
+
   return (
     <SafeAreaView style={tw` h-full`}>
       <ScrollView style={tw`w-[89%] mx-auto`}>
@@ -135,7 +132,7 @@ const HealthScreen = ({ navigation }: Props) => {
 
         <View style={tw`w-full mx-auto pb-3 bg-white rounded-lg mb-5`}>
           <Text style={tw`text-xl text-center font-bold p-1 pt-2 underline`}>
-            Medical
+            Medical Details
           </Text>
           <View style={tw`flex items-center gap-y-2`}>
             <View style={tw`flex-row justify-between w-5/6`}>
@@ -157,12 +154,12 @@ const HealthScreen = ({ navigation }: Props) => {
 
         <View style={tw`w-full mx-auto pb-3 bg-white rounded-lg mb-5`}>
           <View style={tw`flex items-center gap-y-2`}>
-            <Text style={tw`text-2xl text-center p-1 font-bold underline`}>
-              {currentPet!.petName}
+            <Text style={tw`text-xl text-center p-1 font-bold underline`}>
+              Weight Details
             </Text>
             <View style={tw`flex-row justify-between w-5/6`}>
               <Text style={tw`text-lg p-1`}>Current Weight:</Text>
-              <Text style={tw`text-lg p-1`}>30 lbs</Text>
+              <Text style={tw`text-lg p-1`}>{currentPet!.weight}</Text>
             </View>
 
             <TouchableOpacity
@@ -191,9 +188,9 @@ const HealthScreen = ({ navigation }: Props) => {
                 onPress={Keyboard.dismiss}
                 onPressOut={() => setWalkModalOpen(false)}
               > */}
-          <View style={tw`flex justify-center items-center mt-40`}>
+          <View style={tw`flex justify-center items-center mt-64`}>
             <View
-              style={tw`bg-white border-2 border-[#53A2FF] rounded-lg w-2/3 py-8 items-center shadow-lg elevation-5`}
+              style={tw`bg-white border-2 border-[#a457f0] rounded-lg w-2/3 pt-10 pb-8 items-center shadow-lg elevation-5`}
             >
               <TouchableOpacity
                 style={tw`absolute right-4 top-2`}
@@ -204,12 +201,12 @@ const HealthScreen = ({ navigation }: Props) => {
                     name="close"
                     type="font-awesome"
                     size={25}
-                    color="gray"
+                    color="#a457f0"
                   />
                 </View>
               </TouchableOpacity>
               <Text
-                style={tw`text-center text-2xl font-semibold text-slate-800`}
+                style={tw`text-center text-2xl mb-2 font-semibold text-slate-800`}
               >
                 New Weight
               </Text>
@@ -221,7 +218,7 @@ const HealthScreen = ({ navigation }: Props) => {
 
         {currentPetWeightData !== undefined && (
           <View style={tw`w-full mx-auto bg-white rounded-lg mb-5`}>
-            <WeightChart currentPetWeightData={currentPetWeightData} />
+            <WeightChart lastFiveDates={lastFiveDates} weightsFromLastFiveDates={weightsFromLastFiveDates}  />
           </View>
         )}
 
@@ -239,13 +236,6 @@ const HealthScreen = ({ navigation }: Props) => {
               />
             </View>
           </TouchableOpacity>
-        </View>
-
-        <View style={tw`w-full mx-auto pb-3 bg-white rounded-lg mt-5`}>
-          <Text style={tw`text-xl text-center p-1 font-semibold`}>
-            Obedience Training
-          </Text>
-          <Text style={tw`text-center text-lg`}>Coming soon!</Text>
         </View>
       </ScrollView>
     </SafeAreaView>
