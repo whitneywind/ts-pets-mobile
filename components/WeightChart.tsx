@@ -19,8 +19,8 @@ const WeightChart = ({ weightsFromLastFiveDates, lastFiveDates }: any) => {
             },
           ],
         }}
-        width={Dimensions.get("window").width} // from react-native
-        height={250}
+        width={Dimensions.get("window").width + 25} // from react-native
+        height={220}
         yAxisSuffix="lb"
         yAxisInterval={1} // optional, defaults to 1
         chartConfig={{

@@ -27,7 +27,7 @@ const HealthScreen = ({ navigation }: Props) => {
   const currentPetWeightData = { ...currentPet!.weightData };
 
 
-  const lastFiveDates: string[] = [];
+  const lastFiveDates: string[] = ['', '', '', '', ''];
   const weightsFromLastFiveDates: number[] = [0, 0, 0, 0];
 
   const [weightModalOpen, setWeightModalOpen] = useState(false);
@@ -53,7 +53,7 @@ const HealthScreen = ({ navigation }: Props) => {
 
 
   const handleSubmit = (values: any) => {
-    console.log('valuese', values);
+    console.log('values', values);
     currentPetWeightData[values.weightDate] = values.weight;
 
 
@@ -61,6 +61,10 @@ const HealthScreen = ({ navigation }: Props) => {
     const petId = currentPet?.id;
     if (currentPetWeightData && petId) {
       // currentPetWeightData.set(values['weightDate'], values.weight);
+
+      lastFiveDates.shift();
+      lastFiveDates.push(values.weightDate)
+      
       const updatedDetails = {
         weightData: currentPetWeightData,
         weight: values.weight,
