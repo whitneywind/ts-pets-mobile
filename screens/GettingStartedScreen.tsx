@@ -33,6 +33,9 @@ let defaultPetSettings = {
   },
   walkData: {},
   weightData: {},
+  walkGoal: 15,
+  walkGoalMet: false,
+  walkStreak: 0,
 };
 
 const GettingStartedScreen = ({ navigation }: Props) => {

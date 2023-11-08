@@ -43,7 +43,7 @@ const DetailsScreen = ({ navigation }: Props) => {
   const [gender, setGender] = useState(currentPet!.petGender);
   const [microchip, setMicrochip] = useState(currentPet!.microchip);
 
-  // TO-DO: add function to delay state change until after user stops typing
+  // TO-DO: add function to delay state change until after user stops typing - too inefficient right now
 
   const handleSaveChanges = async () => {
     const updatedPetDetails = {
@@ -56,7 +56,7 @@ const DetailsScreen = ({ navigation }: Props) => {
       microchip
     };
 
-    console.log('updatetdpetdettails: ', updatedPetDetails)
+    console.log('updatetdpetdetails: ', updatedPetDetails)
 
     dispatch(
         updateOnePet({
@@ -127,11 +127,9 @@ const handleDelete = () => {
             dispatch(setCurrentPet(null));
             navigation.navigate("GettingStarted");
     } else {
-      // TO-DO: why is it only able too navigate Home and not to any other page??? also it only seems to do the else statement
-        // dispatch(setCurrentPet(petsArray[0]));
         if (petsArray.length >= 1) {
           console.log('trying to go to home')
-          dispatch(setCurrentPet(petsArray[0]));
+          dispatch(setCurrentPet(petsArray[petsArray.length - 1]));
           navigation.navigate("Home");
         } else {
           console.log('trying to go to getting started')
@@ -304,7 +302,7 @@ if (!currentPet) {
           </View>
         </View>
 
-        <View style={tw`w-full mx-auto pb-3 bg-white rounded-lg mb-5`}>
+        {/* <View style={tw`w-full mx-auto pb-3 bg-white rounded-lg mb-5`}>
           <Text style={tw`text-xl text-center font-bold p-1 pt-2 underline`}>
             Medical
           </Text>
@@ -324,7 +322,7 @@ if (!currentPet) {
               <Text style={tw`text-lg p-1`}>none</Text>
             </View>
           </View>
-        </View>
+        </View> */}
 
         <View style={tw`w-full mx-auto pb-3 bg-white rounded-lg mb-5`}>
           <Text style={tw`text-2xl text-center font-bold p-1`}>

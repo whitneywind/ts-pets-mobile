@@ -18,6 +18,7 @@ import WalkChart from '../components/WalkChart';
 import { PetData } from '../typings';
 import { Calendar } from 'react-native-calendars';
 import { updateOnePet, setCurrentPet } from '../slices/petsSlice';
+import { Picker } from "@react-native-picker/picker";
 
 type Props = {
   navigation: any;
@@ -33,6 +34,9 @@ const WalkScreen = ({ navigation }: Props) => {
   const dataFromLastSevenDates = [0, 0, 0, 0, 0, 0, 0];
 
   const [walkModalOpen, setWalkModalOpen] = useState(false);
+  const [goalModalOpen, setGoalModalOpen] = useState(false);
+  const [updatingGoal, setUpdatingGoal] = useState(false);
+
   const [selectedDate, setSelectedDate] = useState('');
 
   for (let i = 7, j = 0; i > 0; i--, j++) {
@@ -70,33 +74,44 @@ const WalkScreen = ({ navigation }: Props) => {
 
 
   const handleSubmit = (values: any) => {
-    let currentIndex = lastSevenDates.indexOf(values['walkDate']);
-    if (currentIndex >= 0) {
-      dataFromLastSevenDates[currentIndex] = parseInt(values.walkLength);
-    }
+    // TO-DO: refactor to use for both modals
+    const petId = currentPet!.id;
+    let updatedDetails: any;
 
-    // update state as well
-    const newWalkData = { ...currentPetWalkData};
-    const petId = currentPet?.id;
-    if (newWalkData && petId) {
-      newWalkData[values['walkDate']] = values.walkLength;
-      const updatedDetails = {
-        walkData: newWalkData
+    if (updatingGoal) {
+      // update for goal
+      console.log('values: ', values)
+      updatedDetails = {
+        walkGoal: parseInt(values.walkGoal)
       }
-      dispatch(
-        updateOnePet({
-          petId,
-          updatedDetails,
-        })
-      );
-      dispatch(
-        setCurrentPet({
-          ...currentPet,
-          ...updatedDetails,
-        })
-      );
-    }
-    getAvg();
+      setUpdatingGoal(false);
+    } else {
+      let currentIndex = lastSevenDates.indexOf(values['walkDate']);
+      if (currentIndex >= 0) {
+        dataFromLastSevenDates[currentIndex] = parseInt(values.walkLength);
+      }
+      // update state as well
+      const newWalkData = { ...currentPetWalkData};
+      if (newWalkData && petId) {
+        newWalkData[values['walkDate']] = values.walkLength;
+        updatedDetails = {
+          walkData: newWalkData,
+        }
+    }}
+
+    dispatch(
+      updateOnePet({
+        petId,
+        updatedDetails,
+      })
+    );
+    dispatch(
+      setCurrentPet({
+        ...currentPet,
+        ...updatedDetails,
+      })
+    );
+  getAvg();
   };
 
   const renderForm = () => {
@@ -104,7 +119,7 @@ const WalkScreen = ({ navigation }: Props) => {
       <Formik
         initialValues={{
           walkDate: selectedDate,
-          walkLength: '0',
+          walkLength: '',
         }}
         onSubmit={(values) => {
           handleSubmit(values);
@@ -113,7 +128,6 @@ const WalkScreen = ({ navigation }: Props) => {
       >
         {({ handleChange, handleBlur, handleSubmit, values }) => (
           <View>
-            <Text style={tw`text-lg mt-4 text-center`}>Select a Date</Text>
             <Calendar
               onDayPress={(day) => {
                 setSelectedDate(day.dateString);
@@ -148,6 +162,48 @@ const WalkScreen = ({ navigation }: Props) => {
     );
   };
 
+  // const handleGoalSubmit = (values: any) => {
+  //   // update goal
+  //   console.log('this is the new goal (not set yet): ', values.walkGoal)
+  // }
+
+  const renderGoalForm = () => {
+    return (
+      <Formik
+        initialValues={{
+          walkGoal: currentPet!.walkGoal
+        }}
+        onSubmit={(values) => {
+          handleSubmit(values);
+          setGoalModalOpen(!goalModalOpen);
+        }}
+      >
+        {({ handleChange, handleSubmit, values }) => (
+          <View>
+            <Text style={tw`text-xl mt-4 text-center`}>Daily Goal (in minutes)</Text>
+            <Picker
+              style={tw`border border-gray-300 mt-2`}
+              selectedValue={values.walkGoal.toString()}
+              onValueChange={handleChange("walkGoal")}
+            >
+              {Array.from({ length: 30 }, (_, i) => (i + 1) * 5).map((multiple) => (
+                <Picker.Item key={multiple.toString()} label={multiple.toString()} value={multiple.toString()} />
+              ))}
+            </Picker>
+              <TouchableOpacity
+              style={tw`rounded-xl bg-[#53A2FF] px-3 py-2`}
+              onPress={() => handleSubmit()}
+            >
+              <Text style={tw`text-white font-bold text-center text-lg`}>
+                Update Daily Goal
+              </Text>
+            </TouchableOpacity>
+        </View>
+        )}
+      </Formik>
+    )
+  }
+
   return (
     <SafeAreaView style={tw` h-full`}>
       <ScrollView style={tw`w-[89%] mx-auto`}>
@@ -173,21 +229,50 @@ const WalkScreen = ({ navigation }: Props) => {
               {currentPet!.petName}
             </Text>
             <View style={tw`flex-row justify-between w-5/6`}>
-              <Text style={tw`text-xl p-1 `}>Weekly Average:</Text>
+              <Text style={tw`text-xl p-1`}>Weekly Average:</Text>
               <Text style={tw`text-xl p-1 font-bold`}>
                 {walkingAvg}
                 <Text style={tw`font-normal`}> min</Text>
                 </Text>
             </View>
+            <View style={tw`flex-row justify-between w-5/6`}>
+              <Text style={tw`text-xl p-1`}>Daily Goal:</Text>
+              <Text style={tw`text-xl p-1 font-bold`}>
+                {currentPet && currentPet.walkGoal > 0 ? currentPet.walkGoal : 0}
+                <Text style={tw`font-normal`}> min</Text>
+                </Text>
+            </View>
+            {/* {currentPet!.walkStreak > 0 && (
+              <View style={tw`flex-row justify-between w-5/6`}>
+                <Text style={tw`text-xl p-1 font-semibold`}>Current Streak:</Text>
+                <Text style={tw`text-xl p-1 font-bold`}>
+                  {currentPet && currentPet.walkStreak ? currentPet.walkStreak : 0}
+                  <Text style={tw`font-normal`}> days</Text>
+                  </Text>
+              </View>
+            )} */}
 
             <TouchableOpacity
               onPress={() => setWalkModalOpen(!walkModalOpen)}
-              style={tw`flex-row justify-between w-5/6 bg-[#53A2FF] rounded-lg py-2`}
+              style={tw`flex-row justify-between w-5/6 bg-[#53A2FF] rounded-lg py-2 mt-4`}
             >
               <Text
                 style={tw`text-lg font-bold text-white text-right w-full text-center p-1`}
               >
                 Add New Walk
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setGoalModalOpen(!goalModalOpen);
+                setUpdatingGoal(true);
+              }}
+              style={tw`flex-row justify-between w-5/6 bg-[#9a9b9c] rounded-lg py-2 mt-2`}
+            >
+              <Text
+                style={tw`text-lg font-semibold text-white text-right w-full text-center p-1`}
+              >
+                Edit Goal
               </Text>
             </TouchableOpacity>
           </View>
@@ -198,7 +283,6 @@ const WalkScreen = ({ navigation }: Props) => {
           transparent={true}
           visible={walkModalOpen}
           onRequestClose={() => {
-            //   Alert.alert("Modal has been closed.");
             setWalkModalOpen(!walkModalOpen);
           }}
         >
@@ -206,7 +290,7 @@ const WalkScreen = ({ navigation }: Props) => {
                 onPress={Keyboard.dismiss}
                 onPressOut={() => setWalkModalOpen(false)}
               > */}
-          <View style={tw`flex justify-center items-center mt-40`}>
+          <View style={tw`flex justify-center items-center mt-32`}>
             <View
               style={tw`bg-white border-2 border-[#53A2FF] rounded-lg w-2/3 py-8 items-center shadow-lg elevation-5`}
             >
@@ -219,7 +303,7 @@ const WalkScreen = ({ navigation }: Props) => {
                     name="close"
                     type="font-awesome"
                     size={25}
-                    color="gray"
+                    color="#53A2FF"
                   />
                 </View>
               </TouchableOpacity>
@@ -234,6 +318,41 @@ const WalkScreen = ({ navigation }: Props) => {
             </View>
           </View>
           {/* </TouchableWithoutFeedback> */}
+        </Modal>
+        
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={goalModalOpen}
+          onRequestClose={() => {
+            setGoalModalOpen(!goalModalOpen);
+          }}
+        >
+          <View style={tw`flex justify-center items-center mt-32`}>
+            <View
+              style={tw`bg-white border-2 border-[#53A2FF] rounded-lg w-2/3 py-8 items-center shadow-lg elevation-5`}
+            >
+              <TouchableOpacity
+                style={tw`absolute right-4 top-2`}
+                onPress={() => setGoalModalOpen(false)}
+              >
+                <View>
+                  <Icon
+                    name="close"
+                    type="font-awesome"
+                    size={25}
+                    color="#53A2FF"
+                  />
+                </View>
+              </TouchableOpacity>
+              {/* <Text
+                style={tw`text-center text-2xl font-semibold text-slate-800`}
+              >
+                Set Daily Goal
+              </Text> */}
+              {renderGoalForm()}
+            </View>
+          </View>
         </Modal>
 
         {lastSevenDates !== undefined && (
@@ -261,4 +380,5 @@ const WalkScreen = ({ navigation }: Props) => {
     </SafeAreaView>
   );
 };
+
 export default WalkScreen;

@@ -64,7 +64,7 @@ const HealthScreen = ({ navigation }: Props) => {
 
       lastFiveDates.shift();
       lastFiveDates.push(values.weightDate)
-      
+
       const updatedDetails = {
         weightData: currentPetWeightData,
         weight: values.weight,
@@ -89,7 +89,7 @@ const HealthScreen = ({ navigation }: Props) => {
       <Formik
         initialValues={{
           weightDate: formattedDate,
-          weight: '0',
+          weight: '',
         }}
         onSubmit={(values) => {
           handleSubmit(values);

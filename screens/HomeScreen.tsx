@@ -72,7 +72,7 @@ function HomeScreen({ navigation }: Props) {
             today?
           </Text>
         </View>
-        <TouchableOpacity onPress={() => navigation.navigate('DetailsScreen')}>
+        <TouchableOpacity onPress={() => navigation.navigate('Details')}>
           <Image
             style={{
               width: 100,
@@ -94,7 +94,7 @@ function HomeScreen({ navigation }: Props) {
         <NavOptions navigation={navigation} />
       </View>
       <View>
-        <Reminders navigation={navigation} />
+        <Reminders navigation={navigation} currentPet={currentPet} />
       </View>
       <PetsList navigation={navigation} />
       <TouchableOpacity

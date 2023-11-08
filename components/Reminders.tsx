@@ -2,7 +2,7 @@ import tw from "twrnc";
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import { Icon } from "@rneui/base";
 
-const Reminders = ({ navigation }: any) => {
+const Reminders = ({ navigation, currentPet }: any) => {
 
   return (
     <View style={[tw`w-[89%] mx-auto rounded-xl mb-10`]}>
@@ -19,7 +19,7 @@ const Reminders = ({ navigation }: any) => {
           </View>
           <View style={tw`flex flex-row`}>
             <Icon name="clock" type="feather" color="white" size={15} />
-            <Text style={tw`text-white`}> 9:00 AM • 8/11/2023</Text>
+            <Text style={tw`text-white`}> 9:00 AM • 2/12/2024</Text>
           </View>
         </View>
         <Icon name="calendar" type="antdesign" color="white" size={45} />
@@ -34,15 +34,23 @@ const Reminders = ({ navigation }: any) => {
             <Text style={tw`text-white text-xl font-bold pl-2`}>
               Daily Goal:
             </Text>
-            <Text style={tw`text-white text-xl font-bold pl-2`}>30 min</Text>
+            <Text style={tw`text-white text-xl font-bold pl-2`}>{currentPet.walkGoal} min</Text>
           </View>
-          <View style={tw`flex flex-row`}>
-            <Icon name="star" type="feather" color="white" size={15} />
-            <Text style={tw`text-white pr-1`}>
-              {" "}
-              <Text style={tw`font-bold`}>5</Text> day streak!
-            </Text>
-          </View>
+
+             {currentPet.walkGoalMet ? (
+                <View style={tw`flex flex-row`}>
+                  <Icon name="star" type="antdesign" color="white" size={15} />
+                  <Text style={tw`text-white pr-1`}> You reached today's goal!
+                  </Text>
+                </View>
+              ) : (
+                <View style={tw`flex flex-row`}>
+                  <Icon name="staro" type="antdesign" color="white" size={15} />
+                  <Text style={tw`text-white pr-1`}> Enter today's walk!
+                  </Text>
+                </View>
+              )
+              }
         </View>
         <Icon
           name="checkbox-marked-outline"

@@ -13,6 +13,9 @@ export interface Pet {
     walkData?: WalkData,
     medicalInfo?: PetMedicalInfo,
     weightData?: WeightData,
+    walkGoal: number,
+    walkGoalMet: boolean,
+    walkStreak?: number,
 }
 
 export interface PetMedicalInfo {
@@ -22,7 +25,7 @@ export interface PetMedicalInfo {
 }
 
 export type WalkData = {
-    [walkDate: string]: string
+    [walkDate: string]: string,
 }
 
 export type WeightData = {  
