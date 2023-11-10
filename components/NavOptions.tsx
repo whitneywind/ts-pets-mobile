@@ -10,7 +10,7 @@ import tw from "twrnc";
 const navData = [
   {
     id: "1",
-    title: "Details",
+    title: "Profile",
     icon: "paw",
     iconType: "font-awesome-5",
     screen: "Details",
@@ -34,10 +34,10 @@ const navData = [
   },
   {
     id: "4",
-    title: "Photos",
-    icon: "camera",
+    title: "Info",
+    icon: "book",
     iconType: "font-awesome-5",
-    screen: "Details",
+    screen: "Info",
     color: "#10B981",
   },
 ];

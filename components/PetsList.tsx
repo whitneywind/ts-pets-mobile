@@ -22,14 +22,6 @@ const PetsList = ({ navigation }: any) => {
 
   return (
     <View style={tw`px-6`}>
-      {/* <View style={tw`w-full flex flex-row justify-between pb-1 bg-white`}>
-        <Text style={tw`font-semibold text-2xl mb-4`}>My Pets</Text>
-        <TouchableOpacity
-          onPress={() => navigation.navigate("GettingStartedScreen")}
-        >
-          <Icon name="pluscircle" type="antdesign" size={35} color="#9BB0A5" />
-        </TouchableOpacity>
-      </View> */}
       <FlatList
         data={petData}
         horizontal

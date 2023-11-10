@@ -16,14 +16,10 @@ import * as ImagePicker from 'expo-image-picker';
 import dogImg from '../assets/images/germanshepherd.png';
 import catImg from '../assets/images/fluffycat.png';
 import { PetData } from '../typings';
-import { current } from '@reduxjs/toolkit';
 
 type Props = {
   navigation: any;
 };
-
-// TO-DO: image not updating immediately bc image is not coming from the petsArray, but the currentPet
-// this is why it only updates immediately in the PetsList component
 
 const DetailsScreen = ({ navigation }: Props) => {
   const petsArray = useSelector((state: PetData) => state.petsArray);
@@ -159,7 +155,7 @@ if (!currentPet) {
             <Icon name="arrowleft" type="antdesign" size={25} />
           </TouchableOpacity>
           <Text style={tw`text-2xl font-semibold pr-2 tracking-wide`}>
-            Details
+            Profile
           </Text>
           {!editMode ? (
             <TouchableOpacity onPress={() => setEditMode(true)} style={tw``}>

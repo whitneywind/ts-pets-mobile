@@ -11,6 +11,7 @@ import DetailsScreen from './screens/DetailsScreen';
 import HealthScreen from './screens/HealthScreen';
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import WalkScreen from './screens/WalkScreen';
+import InfoScreen from './screens/InfoScreen';
 
 // type RootStackParamList = {
 //   Landing: string,
@@ -33,6 +34,7 @@ export default function App() {
                 <Stack.Screen name="Details" component={DetailsScreen} options={{ headerShown: false }} />
                 <Stack.Screen name="Walk" component={WalkScreen} options={{ headerShown: false }} />
                 <Stack.Screen name="Health" component={HealthScreen} options={{ headerShown: false }} />
+                <Stack.Screen name="Info" component={InfoScreen} options={{ headerShown: false }} />
               </Stack.Navigator>
             </SafeAreaProvider>
           </GestureHandlerRootView>

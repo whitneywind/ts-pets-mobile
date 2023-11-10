@@ -18,8 +18,8 @@ type Props = {
 function HomeScreen({ navigation }: Props) {
   const petsArray = useSelector((state: PetData) => state.petsArray);
   let currentPet = useSelector((state: PetData) => state.currentPet);
-  console.log('petsArray on homescreen: ', JSON.stringify(petsArray[petsArray.length - 1], null, 2));
-  console.log('current pet', currentPet)
+  // console.log('petsArray on homescreen: ', JSON.stringify(petsArray[petsArray.length - 1], null, 2));
+  // console.log('current pet', currentPet)
   // console.log('curr pet on home', currentPet?.petName)
 
   React.useEffect(() => {

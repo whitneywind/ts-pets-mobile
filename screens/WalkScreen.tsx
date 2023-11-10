@@ -162,11 +162,6 @@ const WalkScreen = ({ navigation }: Props) => {
     );
   };
 
-  // const handleGoalSubmit = (values: any) => {
-  //   // update goal
-  //   console.log('this is the new goal (not set yet): ', values.walkGoal)
-  // }
-
   const renderGoalForm = () => {
     return (
       <Formik
