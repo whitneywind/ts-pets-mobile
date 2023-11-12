@@ -32,8 +32,47 @@ export type WeightData = {
     [weightDate: string]: string
 };
 
-// what state should look like
+// how structured on dogapi
+export type DogEntry = {
+    id: string,
+    type: string,
+    attributes: {
+        name: string,
+        description: string,
+        life: {
+            max: number,
+            min: number,
+        },
+        male_weight: {
+            max: number,
+            min: number,
+        }
+        female_weight: {
+            max: number,
+            min: number,
+        }
+        hypoallergenic: boolean,
+    },
+    relationships: {
+        group: {
+            data: {
+                id: string,
+                type: string,
+            }
+        }
+    }
+}
+
 export type PetData = {
     petsArray: Pet[] | [],
     currentPet: Pet | null,
 };
+
+// data from api
+export type DogFactsData = {
+    dogFacts: DogEntry[] | [],
+};
+
+
+// combined in reducer so state should now be merged and look like:
+// export type RootState = PetData & DogFactsData;

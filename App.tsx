@@ -18,6 +18,21 @@ import InfoScreen from './screens/InfoScreen';
 //   Home: string,
 // }
 
+// import AsyncStorage from '@react-native-async-storage/async-storage';
+
+// // Function to clear local storage
+// const clearLocalStorage = async () => {
+//   try {
+//     await AsyncStorage.clear();
+//     console.log('Local storage cleared successfully');
+//   } catch (error) {
+//     console.error('Error clearing local storage:', error);
+//   }
+// };
+
+// // Call the function where needed
+// clearLocalStorage();
+
 
 export default function App() {
   const Stack = createNativeStackNavigator();

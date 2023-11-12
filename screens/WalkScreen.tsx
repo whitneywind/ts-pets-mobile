@@ -19,6 +19,7 @@ import { PetData } from '../typings';
 import { Calendar } from 'react-native-calendars';
 import { updateOnePet, setCurrentPet } from '../slices/petsSlice';
 import { Picker } from "@react-native-picker/picker";
+import { RootState } from '../store';
 
 type Props = {
   navigation: any;
@@ -27,7 +28,7 @@ type Props = {
 const WalkScreen = ({ navigation }: Props) => {
   const dispatch = useDispatch();
 
-  const currentPet = useSelector((state: PetData) => state.currentPet);
+  const currentPet = useSelector((state: RootState) => state.pets.currentPet);
   const currentPetWalkData = { ...currentPet!.walkData };
 
   const lastSevenDates: string[] = [];

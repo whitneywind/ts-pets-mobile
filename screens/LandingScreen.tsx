@@ -12,6 +12,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { PetData } from '../typings';
 import { setCurrentPet } from '../slices/petsSlice';
 import { useEffect } from 'react';
+import { RootState } from '../store';
+
 
 type Props = {
   navigation: any;
@@ -19,7 +21,15 @@ type Props = {
 
 const LandingScreen = ({ navigation }: Props) => {
   const dispatch = useDispatch();
-  const petsArray = useSelector((state: PetData) => state.petsArray);
+  const pets = useSelector((state: RootState) => state.pets);
+  const currentPet = pets.currentPet;
+  // console.log('curr', currentPet);
+  const petsArray = pets.petsArray;
+  console.log('len', petsArray.length)
+  // const dogFacts = useSelector((state: RootState) => state.dogFacts);
+  // console.log('pets array?: ', pets.petsArray);
+  // console.log('dog facts?: ', dogFacts.dogFacts);
+
 
   useEffect(() => {
     if (petsArray && petsArray.length > 0) {

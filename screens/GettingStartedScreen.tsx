@@ -15,6 +15,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Pet, PetData } from '../typings';
 import { setPetsArray, setCurrentPet } from '../slices/petsSlice';
+import { RootState } from '../store';
 
 type Props = {
   navigation: any;
@@ -42,7 +43,7 @@ const GettingStartedScreen = ({ navigation }: Props) => {
   const [selectedPet, setSelectedPet] = useState('');
   const [petGender, setPetGender] = useState('');
   const dispatch = useDispatch();
-  const petsArray = useSelector((state: PetData) => state.petsArray);
+  const petsArray = useSelector((state: RootState) => state.pets.petsArray);
 
   const setPetData = async (values: any) => {
     const uniqueId =

@@ -15,6 +15,7 @@ import { Formik } from 'formik';
 import WeightChart from '../components/WeightChart';
 import { PetData, WeightData } from '../typings';
 import { setCurrentPet, updateOnePet } from '../slices/petsSlice';
+import { RootState } from '../store';
 
 type Props = {
   navigation: any;
@@ -23,7 +24,7 @@ type Props = {
 const HealthScreen = ({ navigation }: Props) => {
   const dispatch = useDispatch();
 
-  const currentPet = useSelector((state: PetData) => state.currentPet);
+  const currentPet = useSelector((state: RootState) => state.pets.currentPet);
   const currentPetWeightData = { ...currentPet!.weightData };
 
 

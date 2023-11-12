@@ -1,6 +1,7 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
 import petsReducer from "./slices/petsSlice";
+import dogDataReducer from "./slices/dogFactsSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { persistStore, persistReducer, FLUSH,
     REHYDRATE,
@@ -10,7 +11,7 @@ import { persistStore, persistReducer, FLUSH,
     REGISTER, } from "redux-persist"
 
 // the redux-persist library is used here as an efficient way of combining the state data and the data persisted to the async-storge
-// this is animprovement compared to the first draft app which manually pulled from and  saved to async-storage throughout the app usage
+// this is a BIG improvement from the first draft app which manually pulled from and saved to async-storage throughout the app usage
 
 // persist config
 const persistConfig = {
@@ -18,8 +19,13 @@ const persistConfig = {
     storage: AsyncStorage
 };
 
+const rootReducer = combineReducers({
+  pets: petsReducer,
+  dogFacts: dogDataReducer,
+});
+
 // wrapping root reducer with persistReducer
-const persistedReducer = persistReducer(persistConfig, petsReducer);
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
     reducer: persistedReducer,

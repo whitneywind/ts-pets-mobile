@@ -25,7 +25,7 @@ const InfoScreen = ({ navigation }: any) => {
     const [allBreeds, setAllBreeds] = useState<Array<any>>([]);
     const [currentPage, setCurrentPage] = useState<number>(1);
 
-    // TO-DO: save breed data in redux so fetchAllBreeds will only run if that data doesn't yet exist
+    // TO-DO!: save breed data in redux so fetchAllBreeds will only run if that data doesn't yet exist - saving a LOT of fetch calls
 
     const fetchAllBreeds = async () => {
         const breedList = [];
@@ -55,10 +55,35 @@ const InfoScreen = ({ navigation }: any) => {
         fetchAllBreeds();
     }, []);
 
+    const searchBreed = () => {
+        const breed = allBreeds.find((item) => item.attributes.name === searchQuery);
+    
+        if (breed) {
+          setSearchResult(breed);
+        } else {
+          setSearchResult(null); // Breed not found
+        }
+      };
 
     return (
         <SafeAreaView>
-
+            <View>
+            <TextInput
+                placeholder="Search for a dog breed"
+                value={searchQuery}
+                onChangeText={setSearchQuery}
+            />
+            <Button title="Search" onPress={searchBreed} />
+            {searchResult ? (
+                <View>
+                <Text>Name: {searchResult.attributes.name}</Text>
+                <Text>Description: {searchResult.attributes.description}</Text>
+                {/* Display other breed attributes as needed */}
+                </View>
+            ) : (
+                <Text>Breed not found</Text>
+            )}
+            </View>
                 <Text style={tw`text-center `}>Dog Breed Info Powered by Stratonauts Dog API</Text>
         </SafeAreaView>
     )

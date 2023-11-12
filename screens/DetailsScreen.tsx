@@ -16,14 +16,15 @@ import * as ImagePicker from 'expo-image-picker';
 import dogImg from '../assets/images/germanshepherd.png';
 import catImg from '../assets/images/fluffycat.png';
 import { PetData } from '../typings';
+import { RootState } from '../store';
 
 type Props = {
   navigation: any;
 };
 
 const DetailsScreen = ({ navigation }: Props) => {
-  const petsArray = useSelector((state: PetData) => state.petsArray);
-  const currentPet = useSelector((state: PetData) => state.currentPet);
+  const petsArray = useSelector((state: RootState) => state.pets.petsArray);
+  const currentPet = useSelector((state: RootState) => state.pets.currentPet);
 
   // if (!currentPet || petsArray.length === 0) {
   //   navigation.navigate('GettingStarted');

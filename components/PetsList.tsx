@@ -6,10 +6,11 @@ import dogImg from "../assets/images/germanshepherd.png";
 import catImg from "../assets/images/fluffycat.png";
 import { setCurrentPet } from "../slices/petsSlice";
 import { PetData } from "../typings";
+import { RootState } from "../store";
 
 const PetsList = ({ navigation }: any) => {
-  const petData = useSelector((state: PetData) => state.petsArray);
-  const currPet = useSelector((state: PetData) => state.currentPet);
+  const petData = useSelector((state: RootState) => state.pets.petsArray);
+  const currPet = useSelector((state: RootState) => state.pets.currentPet);
 
   const dispatch = useDispatch();
 
