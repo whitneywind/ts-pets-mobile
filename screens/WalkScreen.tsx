@@ -18,7 +18,7 @@ import WalkChart from '../components/WalkChart';
 import { PetData } from '../typings';
 import { Calendar } from 'react-native-calendars';
 import { updateOnePet, setCurrentPet } from '../slices/petsSlice';
-import { Picker } from "@react-native-picker/picker";
+import { Picker } from '@react-native-picker/picker';
 import { RootState } from '../store';
 
 type Props = {
@@ -49,30 +49,31 @@ const WalkScreen = ({ navigation }: Props) => {
     const formattedDate = `${year}-${month}-${day}`;
     lastSevenDates.push(formattedDate);
 
-      // get data for this date if it exists
-      if (!currentPetWalkData) {
-        continue;
-      } else if (currentPetWalkData[formattedDate]) {
-        const walkingTime = parseInt(currentPetWalkData[formattedDate]);
-        dataFromLastSevenDates[j] = walkingTime;
-      }
+    // get data for this date if it exists
+    if (!currentPetWalkData) {
+      continue;
+    } else if (currentPetWalkData[formattedDate]) {
+      const walkingTime = parseInt(currentPetWalkData[formattedDate]);
+      dataFromLastSevenDates[j] = walkingTime;
+    }
   }
 
-  let walkingAvg = Math.floor(dataFromLastSevenDates.reduce((acc, curr) => {
-    return acc + curr;
-  }, 0) / 7)
+  let walkingAvg = Math.floor(
+    dataFromLastSevenDates.reduce((acc, curr) => {
+      return acc + curr;
+    }, 0) / 7
+  );
 
   const getAvg = () => {
     let avg = dataFromLastSevenDates.reduce((acc, curr) => {
       return acc + curr;
     }, 0);
     walkingAvg = Math.floor(avg / 7);
-  }
+  };
 
   useEffect(() => {
     getAvg();
   }, []);
-
 
   const handleSubmit = (values: any) => {
     // TO-DO: refactor to use for both modals
@@ -81,10 +82,10 @@ const WalkScreen = ({ navigation }: Props) => {
 
     if (updatingGoal) {
       // update for goal
-      console.log('values: ', values)
+      console.log('values: ', values);
       updatedDetails = {
-        walkGoal: parseInt(values.walkGoal)
-      }
+        walkGoal: parseInt(values.walkGoal),
+      };
       setUpdatingGoal(false);
     } else {
       let currentIndex = lastSevenDates.indexOf(values['walkDate']);
@@ -92,13 +93,14 @@ const WalkScreen = ({ navigation }: Props) => {
         dataFromLastSevenDates[currentIndex] = parseInt(values.walkLength);
       }
       // update state as well
-      const newWalkData = { ...currentPetWalkData};
+      const newWalkData = { ...currentPetWalkData };
       if (newWalkData && petId) {
         newWalkData[values['walkDate']] = values.walkLength;
         updatedDetails = {
           walkData: newWalkData,
-        }
-    }}
+        };
+      }
+    }
 
     dispatch(
       updateOnePet({
@@ -112,7 +114,7 @@ const WalkScreen = ({ navigation }: Props) => {
         ...updatedDetails,
       })
     );
-  getAvg();
+    getAvg();
   };
 
   const renderForm = () => {
@@ -167,7 +169,7 @@ const WalkScreen = ({ navigation }: Props) => {
     return (
       <Formik
         initialValues={{
-          walkGoal: currentPet!.walkGoal
+          walkGoal: currentPet!.walkGoal,
         }}
         onSubmit={(values) => {
           handleSubmit(values);
@@ -176,17 +178,25 @@ const WalkScreen = ({ navigation }: Props) => {
       >
         {({ handleChange, handleSubmit, values }) => (
           <View>
-            <Text style={tw`text-xl mt-4 text-center`}>Daily Goal (in minutes)</Text>
+            <Text style={tw`text-xl mt-4 text-center`}>
+              Daily Goal (in minutes)
+            </Text>
             <Picker
               style={tw`border border-gray-300 mt-2`}
               selectedValue={values.walkGoal.toString()}
-              onValueChange={handleChange("walkGoal")}
+              onValueChange={handleChange('walkGoal')}
             >
-              {Array.from({ length: 30 }, (_, i) => (i + 1) * 5).map((multiple) => (
-                <Picker.Item key={multiple.toString()} label={multiple.toString()} value={multiple.toString()} />
-              ))}
+              {Array.from({ length: 30 }, (_, i) => (i + 1) * 5).map(
+                (multiple) => (
+                  <Picker.Item
+                    key={multiple.toString()}
+                    label={multiple.toString()}
+                    value={multiple.toString()}
+                  />
+                )
+              )}
             </Picker>
-              <TouchableOpacity
+            <TouchableOpacity
               style={tw`rounded-xl bg-[#53A2FF] px-3 py-2`}
               onPress={() => handleSubmit()}
             >
@@ -194,11 +204,11 @@ const WalkScreen = ({ navigation }: Props) => {
                 Update Daily Goal
               </Text>
             </TouchableOpacity>
-        </View>
+          </View>
         )}
       </Formik>
-    )
-  }
+    );
+  };
 
   return (
     <SafeAreaView style={tw` h-full`}>
@@ -229,14 +239,16 @@ const WalkScreen = ({ navigation }: Props) => {
               <Text style={tw`text-xl p-1 font-bold`}>
                 {walkingAvg}
                 <Text style={tw`font-normal`}> min</Text>
-                </Text>
+              </Text>
             </View>
             <View style={tw`flex-row justify-between w-5/6`}>
               <Text style={tw`text-xl p-1`}>Daily Goal:</Text>
               <Text style={tw`text-xl p-1 font-bold`}>
-                {currentPet && currentPet.walkGoal > 0 ? currentPet.walkGoal : 0}
+                {currentPet && currentPet.walkGoal > 0
+                  ? currentPet.walkGoal
+                  : 0}
                 <Text style={tw`font-normal`}> min</Text>
-                </Text>
+              </Text>
             </View>
             {/* {currentPet!.walkStreak > 0 && (
               <View style={tw`flex-row justify-between w-5/6`}>
@@ -310,12 +322,11 @@ const WalkScreen = ({ navigation }: Props) => {
               </Text>
 
               {renderForm()}
-
             </View>
           </View>
           {/* </TouchableWithoutFeedback> */}
         </Modal>
-        
+
         <Modal
           animationType="slide"
           transparent={true}
@@ -353,7 +364,10 @@ const WalkScreen = ({ navigation }: Props) => {
 
         {lastSevenDates !== undefined && (
           <View style={tw`w-full mx-auto bg-white rounded-lg mb-5`}>
-            <WalkChart lastSevenDates={lastSevenDates} dataFromLastSevenDates={dataFromLastSevenDates} />
+            <WalkChart
+              lastSevenDates={lastSevenDates}
+              dataFromLastSevenDates={dataFromLastSevenDates}
+            />
           </View>
         )}
 

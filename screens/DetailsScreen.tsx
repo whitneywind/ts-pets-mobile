@@ -50,23 +50,23 @@ const DetailsScreen = ({ navigation }: Props) => {
       weight,
       petAgeYears,
       gender,
-      microchip
+      microchip,
     };
 
-    console.log('updatetdpetdetails: ', updatedPetDetails)
+    console.log('updatetdpetdetails: ', updatedPetDetails);
 
     dispatch(
-        updateOnePet({
-          petId: currentPet!.id,
-          updatedDetails: updatedPetDetails,
-        })
-      );
-      dispatch(
-        setCurrentPet({
-          ...currentPet,
-          ...updatedPetDetails,
-        })
-      );
+      updateOnePet({
+        petId: currentPet!.id,
+        updatedDetails: updatedPetDetails,
+      })
+    );
+    dispatch(
+      setCurrentPet({
+        ...currentPet,
+        ...updatedPetDetails,
+      })
+    );
 
     setEditMode(false);
   };
@@ -75,7 +75,6 @@ const DetailsScreen = ({ navigation }: Props) => {
   useEffect(() => {
     console.log('currentPet:', currentPet!.petName);
     console.log('pet data length: ', petsArray.length);
-
   }, [currentPet, petsArray]);
 
   const [image, setImage] = useState<string | null>(null);
@@ -116,37 +115,37 @@ const DetailsScreen = ({ navigation }: Props) => {
   };
 
   // deletes from array but current pet not updating
-const handleDelete = () => {
-    console.log('deleting this id: ', currentPet!.id)
+  const handleDelete = () => {
+    console.log('deleting this id: ', currentPet!.id);
     dispatch(deleteOnePet({ petId: currentPet!.id }));
-  
+
     if (!petsArray || petsArray.length < 1) {
-            dispatch(setCurrentPet(null));
-            navigation.navigate("GettingStarted");
+      dispatch(setCurrentPet(null));
+      navigation.navigate('GettingStarted');
     } else {
-        if (petsArray.length >= 1) {
-          console.log('trying to go to home')
-          dispatch(setCurrentPet(petsArray[petsArray.length - 1]));
-          navigation.navigate("Home");
-        } else {
-          console.log('trying to go to getting started')
-          dispatch(setCurrentPet(null));
-          navigation.navigate("GettingStarted");
-        }
+      if (petsArray.length >= 1) {
+        console.log('trying to go to home');
+        dispatch(setCurrentPet(petsArray[petsArray.length - 1]));
+        navigation.navigate('Home');
+      } else {
+        console.log('trying to go to getting started');
+        dispatch(setCurrentPet(null));
+        navigation.navigate('GettingStarted');
+      }
     }
 
-      // setTimeout(updateCurr, 500);
-};
+    // setTimeout(updateCurr, 500);
+  };
 
-if (!currentPet) {
-  return (
-    <SafeAreaView>
-      <View>
-        <Text>no pet data</Text>
-      </View>
-    </SafeAreaView>
-  )
-}
+  if (!currentPet) {
+    return (
+      <SafeAreaView>
+        <View>
+          <Text>no pet data</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={tw`h-full`}>
@@ -325,9 +324,7 @@ if (!currentPet) {
           <Text style={tw`text-2xl text-center font-bold p-1`}>
             Activity Log
           </Text>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('ActivityScreen')}
-          >
+          <TouchableOpacity onPress={() => navigation.navigate('Walk')}>
             <View style={tw`bg-emerald-400 rounded-lg py-2 w-1/3 my-2 mx-auto`}>
               <Icon
                 name="arrow-right-circle"

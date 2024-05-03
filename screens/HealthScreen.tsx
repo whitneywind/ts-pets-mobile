@@ -27,7 +27,6 @@ const HealthScreen = ({ navigation }: Props) => {
   const currentPet = useSelector((state: RootState) => state.pets.currentPet);
   const currentPetWeightData = { ...currentPet!.weightData };
 
-
   const lastFiveDates: string[] = ['', '', '', '', ''];
   const weightsFromLastFiveDates: number[] = [0, 0, 0, 0];
 
@@ -52,11 +51,9 @@ const HealthScreen = ({ navigation }: Props) => {
     }
   }
 
-
   const handleSubmit = (values: any) => {
     console.log('values', values);
     currentPetWeightData[values.weightDate] = values.weight;
-
 
     // update state as well
     const petId = currentPet?.id;
@@ -64,12 +61,12 @@ const HealthScreen = ({ navigation }: Props) => {
       // currentPetWeightData.set(values['weightDate'], values.weight);
 
       lastFiveDates.shift();
-      lastFiveDates.push(values.weightDate)
+      lastFiveDates.push(values.weightDate);
 
       const updatedDetails = {
         weightData: currentPetWeightData,
         weight: values.weight,
-      }
+      };
       dispatch(
         updateOnePet({
           petId,
@@ -215,7 +212,7 @@ const HealthScreen = ({ navigation }: Props) => {
               >
                 New Weight
               </Text>
-              
+
               {renderForm()}
             </View>
           </View>
@@ -223,7 +220,10 @@ const HealthScreen = ({ navigation }: Props) => {
 
         {currentPetWeightData !== undefined && (
           <View style={tw`w-full mx-auto bg-white rounded-lg mb-5`}>
-            <WeightChart lastFiveDates={lastFiveDates} weightsFromLastFiveDates={weightsFromLastFiveDates}  />
+            <WeightChart
+              lastFiveDates={lastFiveDates}
+              weightsFromLastFiveDates={weightsFromLastFiveDates}
+            />
           </View>
         )}
 

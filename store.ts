@@ -2,6 +2,7 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
 import petsReducer from "./slices/petsSlice";
 import dogDataReducer from "./slices/dogFactsSlice";
+import generalInfoReducer from "./slices/generalInfoSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { persistStore, persistReducer, FLUSH,
     REHYDRATE,
@@ -21,6 +22,7 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   pets: petsReducer,
+  petInfo: generalInfoReducer,
   dogFacts: dogDataReducer,
 });
 

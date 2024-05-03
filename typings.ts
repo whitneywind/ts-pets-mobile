@@ -73,6 +73,22 @@ export type DogFactsData = {
     dogFacts: DogEntry[] | [],
 };
 
+export interface Contact {
+    name: string;
+    phoneNumber: string;
+}
+
+// the key should be a stringified date
+export interface DateApptMap {
+    [key: string]: string;
+}
+
+export interface GeneralInfo {
+    contactList: Contact[];
+    appointments: DateApptMap;
+}
+
+
 
 // combined in reducer so state should now be merged and look like:
-// export type RootState = PetData & DogFactsData;
+// export type GlobalState = PetData & DogFactsData & PetInfoData;

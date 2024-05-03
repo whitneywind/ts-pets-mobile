@@ -30,7 +30,7 @@ function HomeScreen({ navigation }: Props) {
     });
 
     if (petsArray.length === 0) {
-      navigation.navigate("GettingStarted");
+      navigation.navigate('GettingStarted');
     }
   }, [navigation]);
 

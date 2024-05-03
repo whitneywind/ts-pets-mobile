@@ -1,92 +1,253 @@
+import { Icon } from '@rneui/base';
 import { useEffect, useState } from 'react';
-import { Button } from 'react-native';
 import {
-    SafeAreaView,
-    Text,
-    View,
-    Image,
-    TouchableOpacity,
-    Pressable,
-    FlatList,
-    TextInput,
+  Button,
+  Keyboard,
+  Modal,
+  ScrollView,
+  TouchableWithoutFeedback,
+} from 'react-native';
+import {
+  SafeAreaView,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  Pressable,
+  FlatList,
+  TextInput,
 } from 'react-native';
 import tw from 'twrnc';
-
-type ItemProps = { 
-    name: string;
-    description: string;
-    [key: string]: any;
-};
-
+import { Contact } from '../typings';
+import { Formik } from 'formik';
+import { RootState } from '../store';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  clearAllGeneralInfo,
+  setContactInfo,
+  deleteContact,
+} from '../slices/generalInfoSlice';
 
 const InfoScreen = ({ navigation }: any) => {
-    const [searchQuery, setSearchQuery] = useState<any>('');
-    const [searchResult, setSearchResult] = useState<any>(null);
-    const [allBreeds, setAllBreeds] = useState<Array<any>>([]);
-    const [currentPage, setCurrentPage] = useState<number>(1);
+  const contactArray = useSelector(
+    (state: RootState) => state.petInfo.contactList
+  );
+  const dispatch = useDispatch();
+  // dispatch(clearAllGeneralInfo())
 
-    // TO-DO!: save breed data in redux so fetchAllBreeds will only run if that data doesn't yet exist - saving a LOT of fetch calls
+  const [contacts, setContacts] = useState<Contact[]>([]);
+  const [contactModalOpen, setContactModalOpen] = useState(false);
+  const [editContactInfo, setEditContactInfo] = useState<Contact>({
+    name: '',
+    phoneNumber: '',
+  });
+  const [editIndex, setEditIndex] = useState(-1);
 
-    const fetchAllBreeds = async () => {
-        const breedList = [];
-        let nextPage = `https://dogapi.dog/api/v2/breeds`;
-    
-        try {
-          while (nextPage) {
-            const response = await fetch(nextPage);
-            const data = await response.json();
-            const breeds = data.data;
-    
-            // Add breeds to the list
-            breedList.push(...breeds);
-    
-            // Check if there is a next page
-            nextPage = data.links.next;
-          }
-    
-          // Store all the breeds in state
-          setAllBreeds(breedList);
-        } catch (err) {
-          console.log(err);
-        }
-      };
+  useEffect(() => {
+    setContacts([...contactArray]);
+  }, []);
 
-    useEffect(()  => {
-        fetchAllBreeds();
-    }, []);
+  const handleAddEditContact = (name: string, phoneNumber: string) => {
+    if (name && phoneNumber) {
+      let newContactsArray = contacts;
 
-    const searchBreed = () => {
-        const breed = allBreeds.find((item) => item.attributes.name === searchQuery);
-    
-        if (breed) {
-          setSearchResult(breed);
-        } else {
-          setSearchResult(null); // Breed not found
-        }
-      };
+      if (contacts.length > 0 && editIndex > -1) {
+        // edit existing contact
+        console.log('editing');
+        newContactsArray[editIndex] = { name, phoneNumber };
+      } else {
+        console.log('adding new');
+        newContactsArray.push({ name, phoneNumber });
+      }
 
+      setContacts([...newContactsArray]);
+      console.log('dispatching this: ', contacts);
+      dispatch(setContactInfo(contacts));
+    }
+  };
+
+  const toggleContactModalOpen = () => {
+    setContactModalOpen(!contactModalOpen);
+
+    if (!contactModalOpen) {
+      setEditContactInfo({ name: '', phoneNumber: '' });
+      setEditIndex(-1);
+    }
+  };
+
+  const handleDelete = () => {
+    const newContactsArray = contacts;
+    newContactsArray.splice(editIndex, 1);
+    dispatch(deleteContact([...newContactsArray]));
+    toggleContactModalOpen();
+  };
+
+  const renderForm = () => {
     return (
-        <SafeAreaView>
-            <View>
-            <TextInput
-                placeholder="Search for a dog breed"
-                value={searchQuery}
-                onChangeText={setSearchQuery}
-            />
-            <Button title="Search" onPress={searchBreed} />
-            {searchResult ? (
-                <View>
-                <Text>Name: {searchResult.attributes.name}</Text>
-                <Text>Description: {searchResult.attributes.description}</Text>
-                {/* Display other breed attributes as needed */}
-                </View>
-            ) : (
-                <Text>Breed not found</Text>
-            )}
+      <Formik
+        initialValues={{
+          name: editContactInfo.name || '',
+          phoneNumber: editContactInfo.phoneNumber || '',
+        }}
+        onSubmit={(values) => {
+          console.log('valuees; ', values);
+          handleAddEditContact(values.name, values.phoneNumber);
+          toggleContactModalOpen();
+        }}
+      >
+        {({ handleChange, handleBlur, handleSubmit, values }) => (
+          <View style={tw`w-full`}>
+            <View style={tw`flex items-center mb-6 mx-3`}>
+              <Text style={tw`text-lg text-center`}>Contact:</Text>
+              <TextInput
+                style={tw`border border-gray-300 text-xl pb-4 pt-2 mt-2 w-full text-center`}
+                onChangeText={handleChange('name')}
+                onBlur={handleBlur('name')}
+                value={values.name}
+                placeholder="Vet"
+                keyboardType="default"
+              />
+
+              <Text style={tw`text-lg mt-4 text-center`}>Phone Number:</Text>
+              <TextInput
+                style={tw`border border-gray-300 text-xl pb-4 pt-2 mt-2 w-full text-center`}
+                onChangeText={handleChange('phoneNumber')}
+                onBlur={handleBlur('phoneNumber')}
+                value={values.phoneNumber}
+                placeholder="8186952764"
+                keyboardType="numeric"
+              />
             </View>
-                <Text style={tw`text-center `}>Dog Breed Info Powered by Stratonauts Dog API</Text>
-        </SafeAreaView>
-    )
+            <TouchableOpacity
+              style={tw`rounded-xl bg-[#a457f0] p-2 px-8 mx-3`}
+              onPress={() => handleSubmit()}
+            >
+              <Text style={tw`text-white font-bold text-center text-lg`}>
+                Submit
+              </Text>
+            </TouchableOpacity>
+
+            {editIndex >= 0 && (
+              <TouchableOpacity
+                style={tw`rounded-xl bg-[#f08757] mt-5 p-2 px-8 mx-3`}
+                onPress={handleDelete}
+              >
+                <Text style={tw`text-white font-bold text-center text-lg`}>
+                  Delete
+                </Text>
+              </TouchableOpacity>
+            )}
+          </View>
+        )}
+      </Formik>
+    );
+  };
+
+  return (
+    <SafeAreaView style={tw` h-full`}>
+      <TouchableWithoutFeedback
+        onPress={() => {
+          // Keyboard.dismiss
+          setContactModalOpen(false);
+        }}
+      >
+        <ScrollView style={tw`w-[89%] mx-auto`}>
+          <View
+            style={tw`flex flex-row items-center justify-between mt-2 mb-5`}
+          >
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Icon name="arrowleft" type="antdesign" size={25} style={tw``} />
+            </TouchableOpacity>
+            <Text style={tw`text-xl font-semibold pr-2`}>Info</Text>
+            <Icon name="more-vertical" type="feather" size={25} style={tw``} />
+          </View>
+          <View>
+            <View>
+              <View style={tw`w-full mx-auto pb-3 bg-white rounded-lg mb-5`}>
+                <Text
+                  style={tw`text-xl text-center font-bold p-1 pt-2 underline`}
+                >
+                  Important Contacts
+                </Text>
+                <View style={tw`w-full flex px-6 items-center`}>
+                  {contacts.map((contact, index) => (
+                    <TouchableOpacity
+                      onPress={() => {
+                        setEditContactInfo({
+                          name: contact.name,
+                          phoneNumber: contact.phoneNumber,
+                        });
+                        setEditIndex(index);
+                        setContactModalOpen(true);
+                      }}
+                      key={index}
+                      style={tw`flex flex-row justify-between items-center py-2`}
+                    >
+                      <Text style={tw`w-1/2 text-base`}>{contact.name}</Text>
+                      <Text style={tw`w-1/2 text-base text-right`}>
+                        {contact.phoneNumber}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                  <TouchableOpacity
+                    onPress={toggleContactModalOpen}
+                    style={tw`flex-row justify-between bg-[#a457f0] rounded-lg py-2 mt-4`}
+                  >
+                    <Text
+                      style={tw`text-lg font-bold text-white text-right w-full text-center p-1`}
+                    >
+                      Add New Contact
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+
+              <Modal
+                animationType="slide"
+                transparent={true}
+                visible={contactModalOpen}
+                onRequestClose={toggleContactModalOpen}
+              >
+                <View style={tw`flex justify-center items-center mt-64`}>
+                  <View
+                    style={tw`bg-white border-2 border-[#a457f0] rounded-lg w-2/3 pt-10 pb-8 items-center shadow-lg elevation-5`}
+                  >
+                    <TouchableOpacity
+                      style={tw`absolute right-4 top-2`}
+                      onPress={toggleContactModalOpen}
+                    >
+                      <View>
+                        <Icon
+                          name="close"
+                          type="font-awesome"
+                          size={25}
+                          color="#a457f0"
+                        />
+                      </View>
+                    </TouchableOpacity>
+                    <Text
+                      style={tw`text-center text-2xl mb-2 font-semibold text-slate-800`}
+                    >
+                      Add/Edit
+                    </Text>
+
+                    {renderForm()}
+                  </View>
+                </View>
+              </Modal>
+            </View>
+
+            {/* upcoming appointments */}
+
+            {/* TODO: upload info or docs */}
+            {/* <Text>Important Documents</Text>
+          <Text>Keep  your important pet documents organized:</Text>
+          <Text>Relevant Documents like vaccination proof, spay/neuter details, adoption records, etc.</Text> */}
+          </View>
+        </ScrollView>
+      </TouchableWithoutFeedback>
+    </SafeAreaView>
+  );
 };
 
 export default InfoScreen;

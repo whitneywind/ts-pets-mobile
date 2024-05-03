@@ -14,7 +14,6 @@ import { setCurrentPet } from '../slices/petsSlice';
 import { useEffect } from 'react';
 import { RootState } from '../store';
 
-
 type Props = {
   navigation: any;
 };
@@ -25,18 +24,16 @@ const LandingScreen = ({ navigation }: Props) => {
   const currentPet = pets.currentPet;
   // console.log('curr', currentPet);
   const petsArray = pets.petsArray;
-  console.log('len', petsArray.length)
+  console.log('len', petsArray.length);
   // const dogFacts = useSelector((state: RootState) => state.dogFacts);
   // console.log('pets array?: ', pets.petsArray);
   // console.log('dog facts?: ', dogFacts.dogFacts);
-
 
   useEffect(() => {
     if (petsArray && petsArray.length > 0) {
       dispatch(setCurrentPet(petsArray[petsArray.length - 1]));
     }
   }, []);
-  
 
   return (
     <SafeAreaView style={tw`h-full`}>
