@@ -37,6 +37,7 @@ const InfoScreen = ({ navigation }: any) => {
 
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [contactModalOpen, setContactModalOpen] = useState(false);
+  const [callOrEditModalOpen, setCallOrEditModalOpen] = useState(false);
   const [editContactInfo, setEditContactInfo] = useState<Contact>({
     name: '',
     phoneNumber: '',
@@ -69,10 +70,15 @@ const InfoScreen = ({ navigation }: any) => {
   const toggleContactModalOpen = () => {
     setContactModalOpen(!contactModalOpen);
 
-    if (!contactModalOpen) {
-      setEditContactInfo({ name: '', phoneNumber: '' });
-      setEditIndex(-1);
-    }
+    // if (!contactModalOpen) {
+    //   setEditContactInfo({ name: '', phoneNumber: '' });
+    //   setEditIndex(-1);
+    // }
+  };
+
+  const toggleCallOrEditModal = () => {
+    setCallOrEditModalOpen(!callOrEditModalOpen);
+    console.log("info there: ", editContactInfo)
   };
 
   const handleDelete = () => {
@@ -90,9 +96,10 @@ const InfoScreen = ({ navigation }: any) => {
           phoneNumber: editContactInfo.phoneNumber || '',
         }}
         onSubmit={(values) => {
-          console.log('valuees; ', values);
           handleAddEditContact(values.name, values.phoneNumber);
           toggleContactModalOpen();
+          setEditContactInfo({ name: '', phoneNumber: '' });
+          setEditIndex(-1);
         }}
       >
         {({ handleChange, handleBlur, handleSubmit, values }) => (
@@ -178,7 +185,7 @@ const InfoScreen = ({ navigation }: any) => {
                           phoneNumber: contact.phoneNumber,
                         });
                         setEditIndex(index);
-                        setContactModalOpen(true);
+                        setCallOrEditModalOpen(true);
                       }}
                       key={index}
                       style={tw`flex flex-row justify-between items-center py-2`}
@@ -190,7 +197,11 @@ const InfoScreen = ({ navigation }: any) => {
                     </TouchableOpacity>
                   ))}
                   <TouchableOpacity
-                    onPress={toggleContactModalOpen}
+                    onPress={() => {
+                      setEditContactInfo({ name: '', phoneNumber: '' });
+                      setEditIndex(-1);
+                      toggleContactModalOpen();
+                    }}
                     style={tw`flex-row justify-between bg-[#a457f0] rounded-lg py-2 mt-4`}
                   >
                     <Text
@@ -232,6 +243,56 @@ const InfoScreen = ({ navigation }: any) => {
                     </Text>
 
                     {renderForm()}
+                  </View>
+                </View>
+              </Modal>
+
+              <Modal
+                animationType="slide"
+                transparent={true}
+                visible={callOrEditModalOpen}
+                onRequestClose={toggleCallOrEditModal}
+              >
+                <View style={tw`flex justify-center items-center mt-64`}>
+                  <View
+                    style={tw`bg-white border-2 border-[#a457f0] rounded-lg w-[89%] pt-10 pb-8 items-center shadow-lg elevation-5`}
+                  >
+                    <TouchableOpacity
+                      style={tw`absolute right-4 top-2`}
+                      onPress={toggleCallOrEditModal}
+                    >
+                      <View>
+                        <Icon
+                          name="close"
+                          type="font-awesome"
+                          size={25}
+                          color="#a457f0"
+                        />
+                      </View>
+                    </TouchableOpacity>
+
+                    {<>
+                      <TouchableOpacity
+              style={tw`rounded-xl bg-[#a457f0] p-2 px-8 mx-3`}
+              
+            >
+              <Text style={tw`text-white font-bold text-center text-lg`}>
+                Call Now
+              </Text>
+            </TouchableOpacity>
+
+
+                      <TouchableOpacity 
+                        style={tw`rounded-xl bg-[#f08757] mt-5 p-2 px-8 mx-3`}
+                        onPress={() => {
+                          toggleCallOrEditModal();
+                          toggleContactModalOpen();
+                          console.log("values: ", editContactInfo)
+                        }}
+                      >
+                        <Text style={tw`text-white font-bold text-center text-lg`}>Edit Contact</Text>
+                      </TouchableOpacity>
+                      </>}
                   </View>
                 </View>
               </Modal>
