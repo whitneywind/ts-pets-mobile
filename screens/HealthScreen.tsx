@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import tw from 'twrnc';
 import { useDispatch, useSelector } from 'react-redux';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Formik } from 'formik';
 import WeightChart from '../components/WeightChart';
 import { PetData, WeightData } from '../typings';
@@ -31,14 +31,17 @@ const HealthScreen = ({ navigation }: Props) => {
   const weightsFromLastFiveDates: number[] = [0, 0, 0, 0];
 
   const [weightModalOpen, setWeightModalOpen] = useState(false);
+  const [formattedDate, setFormattedDate] = useState('');
 
-  const currentDate = new Date();
+  const getFormattedDate = () => {
+    const currentDate = new Date();
 
-  currentDate.setDate(currentDate.getDate());
-  const year = currentDate.getFullYear();
-  const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-  const day = String(currentDate.getDate()).padStart(2, '0');
-  const formattedDate = `${year}-${month}-${day}`;
+    currentDate.setDate(currentDate.getDate());
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+    const day = String(currentDate.getDate()).padStart(2, '0');
+    setFormattedDate(`${year}-${month}-${day}`);
+  }
 
   // update to get only if exist
   if (currentPetWeightData) {
@@ -81,6 +84,10 @@ const HealthScreen = ({ navigation }: Props) => {
       );
     }
   };
+
+  useEffect(() => {
+    getFormattedDate();
+  }, []);
 
   const renderForm = () => {
     return (

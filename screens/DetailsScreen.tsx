@@ -53,7 +53,7 @@ const DetailsScreen = ({ navigation }: Props) => {
       microchip,
     };
 
-    console.log('updatetdpetdetails: ', updatedPetDetails);
+    // console.log('updated pet details: ', updatedPetDetails);
 
     dispatch(
       updateOnePet({
@@ -72,10 +72,10 @@ const DetailsScreen = ({ navigation }: Props) => {
   };
 
   // test that state updated correctly
-  useEffect(() => {
-    console.log('currentPet:', currentPet!.petName);
-    console.log('pet data length: ', petsArray.length);
-  }, [currentPet, petsArray]);
+  // useEffect(() => {
+  //   console.log('currentPet:', currentPet!.petName);
+  //   console.log('pet data length: ', petsArray.length);
+  // }, [currentPet, petsArray]);
 
   const [image, setImage] = useState<string | null>(null);
 
@@ -88,7 +88,7 @@ const DetailsScreen = ({ navigation }: Props) => {
       quality: 1,
     });
 
-    console.log(JSON.stringify(result, null, 2));
+    // console.log(JSON.stringify(result, null, 2));
 
     if (!result.canceled) {
       setImage(result.assets[0].uri);
@@ -124,11 +124,11 @@ const DetailsScreen = ({ navigation }: Props) => {
       navigation.navigate('GettingStarted');
     } else {
       if (petsArray.length >= 1) {
-        console.log('trying to go to home');
+        // console.log('trying to go to home');
         dispatch(setCurrentPet(petsArray[petsArray.length - 1]));
         navigation.navigate('Home');
       } else {
-        console.log('trying to go to getting started');
+        // console.log('trying to go to getting started');
         dispatch(setCurrentPet(null));
         navigation.navigate('GettingStarted');
       }

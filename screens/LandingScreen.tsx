@@ -24,7 +24,7 @@ const LandingScreen = ({ navigation }: Props) => {
   const currentPet = pets.currentPet;
   // console.log('curr', currentPet);
   const petsArray = pets.petsArray;
-  console.log('len', petsArray.length);
+  // console.log('len', petsArray.length);
   // const dogFacts = useSelector((state: RootState) => state.dogFacts);
   // console.log('pets array?: ', pets.petsArray);
   // console.log('dog facts?: ', dogFacts.dogFacts);
