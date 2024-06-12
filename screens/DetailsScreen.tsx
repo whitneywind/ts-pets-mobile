@@ -199,7 +199,7 @@ const DetailsScreen = ({ navigation }: Props) => {
               </Text>
             ) : (
               <TextInput
-                style={tw`text-2xl font-bold border border-gray-300 p-3`}
+                style={tw`text-2xl pt-2 pb-3 px-4 tracking-wide font-bold border border-2 border-gray-300`}
                 value={petName}
                 onChangeText={setPetName}
               />
@@ -222,7 +222,7 @@ const DetailsScreen = ({ navigation }: Props) => {
                 </Text>
               ) : (
                 <TextInput
-                  style={tw`text-xl border border-gray-300 p-2`}
+                  style={tw`text-lg border border-gray-300 px-2`}
                   value={petAgeYears}
                   onChangeText={setPetAgeYears}
                 />
@@ -237,7 +237,7 @@ const DetailsScreen = ({ navigation }: Props) => {
                 </Text>
               ) : (
                 <TextInput
-                  style={tw`text-xl border border-gray-300 p-2`}
+                  style={tw`text-lg border border-gray-300 px-2`}
                   value={breed}
                   onChangeText={setBreed}
                 />
@@ -255,7 +255,7 @@ const DetailsScreen = ({ navigation }: Props) => {
                 </Text>
               ) : (
                 <TextInput
-                  style={tw`text-xl border border-gray-300 p-2`}
+                  style={tw`text-lg border border-gray-300 px-2`}
                   value={weight}
                   onChangeText={setWeight}
                 />
@@ -271,7 +271,7 @@ const DetailsScreen = ({ navigation }: Props) => {
                 </Text>
               ) : (
                 <TextInput
-                  style={tw`text-xl border border-gray-300 p-2`}
+                  style={tw`text-lg border border-gray-300 px-2`}
                   value={gender}
                   onChangeText={setGender}
                 />
@@ -289,7 +289,7 @@ const DetailsScreen = ({ navigation }: Props) => {
                 </Text>
               ) : (
                 <TextInput
-                  style={tw`text-xl border border-gray-300 p-2`}
+                  style={tw`text-lg border border-gray-300 px-2`}
                   value={microchip}
                   onChangeText={setMicrochip}
                 />

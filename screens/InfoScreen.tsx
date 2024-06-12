@@ -43,6 +43,7 @@ const InfoScreen = ({ navigation }: any) => {
     phoneNumber: '',
   });
   const [editIndex, setEditIndex] = useState(-1);
+  const [editMedical, setEditMedical] = useState(false);
 
   useEffect(() => {
     setContacts([...contactArray]);
@@ -298,6 +299,46 @@ const InfoScreen = ({ navigation }: any) => {
               </Modal>
             </View>
 
+            <View style={tw`w-full mx-auto pb-3 bg-white rounded-lg mb-5`}>
+          <Text style={tw`text-xl text-center font-bold p-1 pt-2 pb-3 underline`}>
+            Medical Details
+          </Text>
+          {!editMedical ? (
+            <TouchableOpacity onPress={() => setEditMedical(true)} style={tw``}>
+              <Icon name="wrench" type="font-awesome" size={20} />
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity 
+              // onPress={handleSaveChanges} 
+              onPress={() => setEditMedical(false)}
+              style={tw``}
+            >
+              <Icon name="check" type="feather" size={20} />
+            </TouchableOpacity>
+          )}
+          <View style={tw`flex items-center gap-y-2 mt-2`}>
+            <View style={tw`flex-row justify-between w-5/6`}>
+              <Text style={tw`text-lg text-right text-gray-700 p-1`}>
+                Allergies
+              </Text>
+              {!editMedical ? (
+                <Text style={tw`text-lg p-1`}>
+                  allergies
+                </Text>
+              ) : (
+                <TextInput
+                  style={tw`text-lg border border-gray-300 px-2`}
+                  // value={allergies}
+                  // onChangeText={setAllergies}
+                />
+              )}
+            </View>
+            <View style={tw`flex-row justify-between w-5/6`}>
+              <Text style={tw`text-lg p-1`}>Medications:</Text>
+              <Text style={tw`text-lg p-1`}>none</Text>
+            </View>
+          </View>
+        </View>
             {/* upcoming appointments */}
 
             {/* TODO: upload info or docs */}

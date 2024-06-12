@@ -136,29 +136,8 @@ const HealthScreen = ({ navigation }: Props) => {
             <Icon name="arrowleft" type="antdesign" size={25} style={tw``} />
           </TouchableOpacity>
           <Text style={tw`text-xl font-semibold pr-2`}>Health</Text>
-          <Icon name="more-vertical" type="feather" size={25} style={tw``} />
-        </View>
 
-        <View style={tw`w-full mx-auto pb-3 bg-white rounded-lg mb-5`}>
-          <Text style={tw`text-xl text-center font-bold p-1 pt-2 underline`}>
-            Medical Details
-          </Text>
-          <View style={tw`flex items-center gap-y-2`}>
-            <View style={tw`flex-row justify-between w-5/6`}>
-              <Text style={tw`text-lg p-1`}>Last Vet Visit:</Text>
-              <Text style={tw`text-lg p-1`}>3/12/2023</Text>
-            </View>
-            <View style={tw`flex-row justify-between w-5/6`}>
-              <Text style={tw`text-lg text-right text-gray-700 p-1`}>
-                Allergies
-              </Text>
-              <Text style={tw`text-lg text-right text-gray-700 p-1`}>none</Text>
-            </View>
-            <View style={tw`flex-row justify-between w-5/6`}>
-              <Text style={tw`text-lg p-1`}>Medications:</Text>
-              <Text style={tw`text-lg p-1`}>none</Text>
-            </View>
-          </View>
+          <Icon name="more-vertical" type="feather" size={20} />
         </View>
 
         <View style={tw`w-full mx-auto pb-3 bg-white rounded-lg mb-5`}>
