@@ -24,7 +24,7 @@ function HomeScreen({ navigation }: Props) {
   // console.log('curr pet on home', currentPet?.petName)
 
   React.useEffect(() => {
-    // if upgrading to React Navigation 7.0 or higher, "any" below can be replaced by "NavigationRemoveEvent"
+    // when upgrading to React Navigation 7.0 or higher, "any" below can be replaced by "NavigationRemoveEvent"
     navigation.addListener('beforeRemove', (e: any) => {
       e.preventDefault();
     });
@@ -55,31 +55,42 @@ function HomeScreen({ navigation }: Props) {
   }
 
   return (
-    <SafeAreaView style={tw`h-full`}>
-      <View style={tw`pt-1 mb-3 w-full`}>
-        <Icon name="dog" type="material-community" size={40} color={'black'} />
+    <SafeAreaView style={tw`h-full flex gap-2`}>
+      <View style={tw`pt-1 w-full`}>
+        <Icon name="dog" type="material-community" size={34} color={'black'} />
       </View>
       <View
-        style={tw`flex flex-row w-full items-center justify-around px-4 mb-3`}
+        style={tw`flex flex-row w-full items-center justify-around px-4 mt-3 mb-5`}
       >
-        <View style={tw`w-[60%]`}>
-          <Text style={tw`text-3xl pb-4`}>Welcome back</Text>
-          <Text style={tw`text-xl text-gray-500`}>
+        <View style={tw`w-[100%] flex items-center`}>
+          {/* <Text style={tw`text-xl pb-4`}>Welcome back</Text> */}
+          <Text style={tw`text-2xl text-gray-500`}>
             How is
-            <Text style={tw`font-bold text-black`}>
+            <Text style={tw`font-bold text-[#10B981]`}>
               {' '}
               {currentPet ? currentPet.petName : 'your pet'}{' '}
             </Text>
             today?
           </Text>
         </View>
+
+      </View>
+      <View>
+        <NavOptions navigation={navigation} />
+      </View>
+      <View>
+        <Reminders navigation={navigation} currentPet={currentPet} />
+      </View>
+
+      <View style={tw`w-full flex items-center`}>
         <TouchableOpacity onPress={() => navigation.navigate('Details')}>
-          <Image
+          {petsArray.length === 1 ? (
+            <Image
             style={{
-              width: 100,
-              height: 100,
+              width: 200,
+              height: 210,
               resizeMode: 'contain',
-              borderRadius: 50,
+              borderRadius: 30,
             }}
             source={
               currentPet && currentPet.uri
@@ -89,23 +100,42 @@ function HomeScreen({ navigation }: Props) {
                 : catImg
             }
           />
+          ) : (
+            <Image
+              style={{
+                width: 200,
+                height: 170,
+                resizeMode: 'contain',
+                borderRadius: 30,
+              }}
+              source={
+                currentPet && currentPet.uri
+                  ? { uri: currentPet.uri }
+                  : currentPet!.petType === 'dog'
+                  ? dogImg
+                  : catImg
+              }
+            />
+          )}
+
         </TouchableOpacity>
       </View>
-      <View>
-        <NavOptions navigation={navigation} />
-      </View>
-      <View>
-        <Reminders navigation={navigation} currentPet={currentPet} />
-      </View>
-      <PetsList navigation={navigation} />
-      <TouchableOpacity
-        style={tw`bg-[#10B981] w-[89%] mx-auto rounded-xl py-2`}
-        onPress={() => navigation.navigate('GettingStarted')}
-      >
-        <Text style={tw`text-white text-lg text-center font-semibold`}>
-          Add Pet
-        </Text>
-      </TouchableOpacity>
+
+      {/* only show list if multiple pets */}
+      {petsArray.length > 1 && (
+        <PetsList navigation={navigation} />
+      )}
+
+      {petsArray.length === 1 && (
+        <TouchableOpacity
+          style={tw`bg-[#6FD5B3] w-[89%] mx-auto rounded-xl py-2`}
+          onPress={() => navigation.navigate('GettingStarted')}
+        >
+          <Text style={tw`text-white text-lg text-center font-semibold`}>
+            Add Pet
+          </Text>
+        </TouchableOpacity>
+      )}
     </SafeAreaView>
   );
 }

@@ -27,22 +27,22 @@ const PetsList = ({ navigation }: any) => {
         data={petData}
         horizontal
         keyExtractor={(item) => item.id}
-        contentContainerStyle={tw`rounded-lg mb-6`}
+        contentContainerStyle={tw`rounded-lg mb-3`}
         renderItem={({ item }) => (
           <TouchableOpacity
             style={tw`mr-5`}
             onPress={() => handleSwitchPet(item.id)}
           >
-            <View style={tw`px-2 pt-3 bg-white w-40 rounded-lg shadow-sm`}>
+            <View style={tw`bg-white px-5 py-3 rounded-lg shadow-sm`}>
               <Image
                 style={[
                   {
-                    width: 130,
-                    height: 100,
+                    width: 80,
+                    height: 60,
                     resizeMode: "contain",
-                    borderRadius: 6,
+                    borderRadius: 10,
                   },
-                  tw`self-center mt-3`,
+                  tw`self-center`,
                 ]}
                 source={
                   item.uri
@@ -52,7 +52,7 @@ const PetsList = ({ navigation }: any) => {
                     : catImg
                 }
               />
-              <Text style={tw`text-xl text-center pb-3 pt-2`}>
+              <Text style={tw` text-center`}>
                 {item.petName}
               </Text>
             </View>
@@ -60,16 +60,16 @@ const PetsList = ({ navigation }: any) => {
         )}
         ListFooterComponent={() => (
           <TouchableOpacity
-            style={tw`mt-8`}
+            style={tw`mt-6 ml-1`}
             onPress={() => navigation.navigate("GettingStarted")}
           >
             <Icon
               name="pluscircle"
               type="antdesign"
-              size={50}
-              color="#10B981"
+              size={30}
+              color="#64748ba1"
             />
-            <Text style={tw`text-slate-700 text-xl mt-2`}>Add New Pet</Text>
+            <Text style={tw`text-gray-500 mt-2`}>Add Pet</Text>
           </TouchableOpacity>
         )}
       />

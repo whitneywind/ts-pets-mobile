@@ -5,10 +5,10 @@ import { Icon } from "@rneui/base";
 const Reminders = ({ navigation, currentPet }: any) => {
 
   return (
-    <View style={[tw`w-[89%] mx-auto rounded-xl mb-10`]}>
+    <View style={[tw`w-[89%] mx-auto rounded-xl mt-1`]}>
       <TouchableOpacity
         onPress={() => navigation.navigate("Health")}
-        style={tw`flex flex-row justify-between bg-[#6FD5B3] rounded-xl items-center pl-3 pr-6 py-4 mb-4`}
+        style={tw`flex flex-row justify-between bg-[#6FD5B3] rounded-xl items-center pl-3 pr-6 py-5 mb-6`}
       >
         <View style={tw`w-[70%]`}>
           <View style={tw`flex flex-row`}>
@@ -26,7 +26,7 @@ const Reminders = ({ navigation, currentPet }: any) => {
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => navigation.navigate("Walk")}
-        style={tw`flex flex-row justify-between bg-[#53A2FF] rounded-xl items-center pl-3 pr-6 py-4`}
+        style={tw`flex flex-row justify-between bg-[#53A2FF] rounded-xl items-center pl-3 pr-6 py-5`}
       >
         <View style={tw`w-[70%]`}>
           <View style={tw`flex flex-row items-center`}>

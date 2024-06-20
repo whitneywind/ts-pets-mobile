@@ -18,7 +18,7 @@ const navData = [
   },
   {
     id: "2",
-    title: "Walks",
+    title: "Activity",
     icon: "dog",
     iconType: "font-awesome-5",
     screen: "Walk",
@@ -26,7 +26,7 @@ const navData = [
   },
   {
     id: "3",
-    title: "Weight",
+    title: "Health",
     icon: "heartbeat",
     iconType: "font-awesome-5",
     screen: "Health",
@@ -46,27 +46,50 @@ const NavOptions = ({ navigation }: any) => {
 
   return (
     <FlatList
-      data={navData}
-      horizontal
-      keyExtractor={(item) => item.id}
-      contentContainerStyle={tw`mb-8 w-[89%] mx-auto justify-between flex`}
-      renderItem={({ item }) => (
-        <TouchableOpacity
-          onPress={() => navigation.navigate(item.screen)}
-          style={tw`w-18 flex rounded-lg`}
-        >
-          <View style={tw`py-3 bg-[${item.color}] flex rounded-lg`}>
-            <Icon
-              style={tw`p-2 rounded-full w-10 self-center text-white`}
-              name={item.icon}
-              color="white"
-              type={item.iconType}
-            />
-          </View>
-          <Text style={tw`text-center mt-1 font-semibold`}>{item.title}</Text>
-        </TouchableOpacity>
-      )}
-    />
+    data={navData}
+    horizontal
+    keyExtractor={(item) => item.id}
+    contentContainerStyle={tw`w-[89%] mx-auto justify-between flex mb-5`}
+    renderItem={({ item }) => (
+      <TouchableOpacity
+        onPress={() => navigation.navigate(item.screen)}
+        style={tw`w-18 flex rounded-lg`}
+      >
+        <View style={tw`py-3 bg-[${item.color}] flex rounded-lg`}>
+          <Icon
+            style={tw`p-2 rounded-full w-10 self-center text-white`}
+            name={item.icon}
+            color="white"
+            type={item.iconType}
+          />
+        </View>
+        <Text style={tw`text-center mt-2 font-semibold`}>{item.title}</Text>
+      </TouchableOpacity>
+    )}
+  />
+  //   <FlatList
+  //     data={navData}
+  //     scrollEnabled={false}
+  //     numColumns={2}
+  //     keyExtractor={(item) => item.id}
+  //     contentContainerStyle={tw`mb-6 w-[89%] mx-auto items-center gap-8 flex`}
+  //     renderItem={({ item }) => (
+  //       <TouchableOpacity
+  //         onPress={() => navigation.navigate(item.screen)}
+  //         style={tw`w-28 mx-6 flex rounded-lg`}
+  //       >
+  //         <View style={tw`py-5 bg-[${item.color}] flex rounded-lg`}>
+  //           <Icon
+  //             style={tw`p-2 rounded-full w-10 self-center text-white`}
+  //             name={item.icon}
+  //             color="white"
+  //             type={item.iconType}
+  //           />
+  //         </View>
+  //         <Text style={tw`text-center mt-1 font-semibold`}>{item.title}</Text>
+  //       </TouchableOpacity>
+  //     )}
+  //   />
   );
 };
 export default NavOptions;

@@ -7,7 +7,7 @@ const WalkChart = ({ lastSevenDates, dataFromLastSevenDates }: any) => {
   return (
     <View style={tw`bg-[#53A2FF] rounded-lg py-2`}>
       <Text style={tw`py-1 text-lg font-semibold text-center text-white`}>
-        Walk Log:
+        Activity Log:
       </Text>
       <LineChart
         data={{

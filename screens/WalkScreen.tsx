@@ -235,18 +235,19 @@ const WalkScreen = ({ navigation }: Props) => {
               {currentPet!.petName}
             </Text>
             <View style={tw`flex-row justify-between w-5/6`}>
-              <Text style={tw`text-xl p-1`}>Weekly Average:</Text>
-              <Text style={tw`text-xl p-1 font-bold`}>
-                {walkingAvg}
-                <Text style={tw`font-normal`}> min</Text>
-              </Text>
-            </View>
-            <View style={tw`flex-row justify-between w-5/6`}>
               <Text style={tw`text-xl p-1`}>Daily Goal:</Text>
               <Text style={tw`text-xl p-1 font-bold`}>
                 {currentPet && currentPet.walkGoal > 0
                   ? currentPet.walkGoal
                   : 0}
+                <Text style={tw`font-normal`}> min</Text>
+              </Text>
+
+            </View>
+            <View style={tw`flex-row justify-between w-5/6`}>
+              <Text style={tw`text-xl p-1`}>Weekly Average:</Text>
+              <Text style={tw`text-xl p-1 font-bold`}>
+                {walkingAvg}
                 <Text style={tw`font-normal`}> min</Text>
               </Text>
             </View>
@@ -267,7 +268,7 @@ const WalkScreen = ({ navigation }: Props) => {
               <Text
                 style={tw`text-lg font-bold text-white text-right w-full text-center p-1`}
               >
-                Add New Walk
+                Add Activity
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
