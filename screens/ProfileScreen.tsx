@@ -6,17 +6,24 @@ import {
   View,
   Image,
   TouchableOpacity,
+  Modal,
 } from 'react-native';
 import tw from 'twrnc';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { TextInput } from 'react-native-gesture-handler';
+import { TextInput, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { setCurrentPet, updateOnePet, deleteOnePet } from '../slices/petsSlice';
 import * as ImagePicker from 'expo-image-picker';
 import dogImg from '../assets/images/germanshepherd.png';
 import catImg from '../assets/images/fluffycat.png';
-import { PetData } from '../typings';
+import { Contact, PetData } from '../typings';
 import { RootState } from '../store';
+import { Formik } from 'formik';
+import {
+  clearAllGeneralInfo,
+  setContactInfo,
+  deleteContact,
+} from '../slices/generalInfoSlice';
 
 type Props = {
   navigation: any;
@@ -25,6 +32,9 @@ type Props = {
 const DetailsScreen = ({ navigation }: Props) => {
   const petsArray = useSelector((state: RootState) => state.pets.petsArray);
   const currentPet = useSelector((state: RootState) => state.pets.currentPet);
+  const contactArray = useSelector(
+    (state: RootState) => state.petInfo.contactList
+  );
 
   // if (!currentPet || petsArray.length === 0) {
   //   navigation.navigate('GettingStarted');
@@ -39,6 +49,19 @@ const DetailsScreen = ({ navigation }: Props) => {
   const [petAgeYears, setPetAgeYears] = useState(currentPet!.petAgeYears);
   const [gender, setGender] = useState(currentPet!.petGender);
   const [microchip, setMicrochip] = useState(currentPet!.microchip);
+  const [contacts, setContacts] = useState<Contact[]>([]);
+  const [contactModalOpen, setContactModalOpen] = useState(false);
+  const [callOrEditModalOpen, setCallOrEditModalOpen] = useState(false);
+  const [editContactInfo, setEditContactInfo] = useState<Contact>({
+    name: '',
+    phoneNumber: '',
+  });
+  const [editIndex, setEditIndex] = useState(-1);
+  const [editMedical, setEditMedical] = useState(false);
+
+  useEffect(() => {
+    setContacts([...contactArray]);
+  }, []);
 
   // TO-DO: add function to delay state change until after user stops typing - too inefficient right now
 
@@ -114,6 +137,39 @@ const DetailsScreen = ({ navigation }: Props) => {
     }
   };
 
+  const handleAddEditContact = (name: string, phoneNumber: string) => {
+    if (name && phoneNumber) {
+      let newContactsArray = contacts;
+
+      if (contacts.length > 0 && editIndex > -1) {
+        // edit existing contact
+        console.log('editing');
+        newContactsArray[editIndex] = { name, phoneNumber };
+      } else {
+        console.log('adding new');
+        newContactsArray.push({ name, phoneNumber });
+      }
+
+      setContacts([...newContactsArray]);
+      console.log('dispatching this: ', contacts);
+      dispatch(setContactInfo(contacts));
+    }
+  };
+
+  const toggleContactModalOpen = () => {
+    setContactModalOpen(!contactModalOpen);
+
+    // if (!contactModalOpen) {
+    //   setEditContactInfo({ name: '', phoneNumber: '' });
+    //   setEditIndex(-1);
+    // }
+  };
+
+  const toggleCallOrEditModal = () => {
+    setCallOrEditModalOpen(!callOrEditModalOpen);
+    console.log("info there: ", editContactInfo)
+  };
+
   // deletes from array but current pet not updating
   const handleDelete = () => {
     console.log('deleting this id: ', currentPet!.id);
@@ -146,9 +202,84 @@ const DetailsScreen = ({ navigation }: Props) => {
       </SafeAreaView>
     );
   }
+  
+  const handleDeleteContact = () => {
+    const newContactsArray = contacts;
+    newContactsArray.splice(editIndex, 1);
+    dispatch(deleteContact([...newContactsArray]));
+    toggleContactModalOpen();
+  };
+
+  const renderForm = () => {
+    return (
+      <Formik
+        initialValues={{
+          name: editContactInfo.name || '',
+          phoneNumber: editContactInfo.phoneNumber || '',
+        }}
+        onSubmit={(values) => {
+          handleAddEditContact(values.name, values.phoneNumber);
+          toggleContactModalOpen();
+          setEditContactInfo({ name: '', phoneNumber: '' });
+          setEditIndex(-1);
+        }}
+      >
+        {({ handleChange, handleBlur, handleSubmit, values }) => (
+          <View style={tw`w-full`}>
+            <View style={tw`flex items-center mb-6 mx-3`}>
+              <Text style={tw`text-lg text-center`}>Contact:</Text>
+              <TextInput
+                style={tw`border border-gray-300 text-xl pb-4 pt-2 mt-2 w-full text-center`}
+                onChangeText={handleChange('name')}
+                onBlur={handleBlur('name')}
+                value={values.name}
+                placeholder="Vet"
+                keyboardType="default"
+              />
+
+              <Text style={tw`text-lg mt-4 text-center`}>Phone Number:</Text>
+              <TextInput
+                style={tw`border border-gray-300 text-xl pb-4 pt-2 mt-2 w-full text-center`}
+                onChangeText={handleChange('phoneNumber')}
+                onBlur={handleBlur('phoneNumber')}
+                value={values.phoneNumber}
+                placeholder="8186952764"
+                keyboardType="numeric"
+              />
+            </View>
+            <TouchableOpacity
+              style={tw`rounded-xl bg-[#a457f0] p-2 px-8 mx-3`}
+              onPress={() => handleSubmit()}
+            >
+              <Text style={tw`text-white font-bold text-center text-lg`}>
+                Submit
+              </Text>
+            </TouchableOpacity>
+
+            {editIndex >= 0 && (
+              <TouchableOpacity
+                style={tw`rounded-xl bg-[#f08757] mt-5 p-2 px-8 mx-3`}
+                onPress={handleDeleteContact}
+              >
+                <Text style={tw`text-white font-bold text-center text-lg`}>
+                  Delete
+                </Text>
+              </TouchableOpacity>
+            )}
+          </View>
+        )}
+      </Formik>
+    );
+  };
 
   return (
     <SafeAreaView style={tw`h-full`}>
+      <TouchableWithoutFeedback
+        onPress={() => {
+          // Keyboard.dismiss
+          setContactModalOpen(false);
+        }}
+      >
       <ScrollView style={tw`w-[89%] mx-auto`}>
         <View style={tw`flex flex-row items-center justify-between mt-2`}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -180,7 +311,7 @@ const DetailsScreen = ({ navigation }: Props) => {
                   resizeMode: 'cover',
                   borderRadius: 6,
                 },
-                tw`self-center m-2`,
+                tw`self-center`,
               ]}
               source={
                 currentPet!.uri
@@ -190,6 +321,7 @@ const DetailsScreen = ({ navigation }: Props) => {
                   : catImg
               }
             />
+            <Text style={tw`text-blue-600 self-center mt-1 mb-4`}>Add/Change Photo</Text>
           </TouchableOpacity>
 
           <View style={tw`flex items-center bg-white rounded-lg mt-3 px-4`}>
@@ -199,7 +331,7 @@ const DetailsScreen = ({ navigation }: Props) => {
               </Text>
             ) : (
               <TextInput
-                style={tw`text-2xl pt-2 pb-3 px-4 tracking-wide font-bold border border-2 border-gray-300`}
+                style={tw`text-2xl pt-2 pb-3 px-4 tracking-wide font-bold border border-2 border-gray-300 rounded-md`}
                 value={petName}
                 onChangeText={setPetName}
               />
@@ -222,7 +354,7 @@ const DetailsScreen = ({ navigation }: Props) => {
                 </Text>
               ) : (
                 <TextInput
-                  style={tw`text-lg border border-gray-300 px-2`}
+                  style={tw`text-lg border border-gray-300  rounded-md px-2`}
                   value={petAgeYears}
                   onChangeText={setPetAgeYears}
                 />
@@ -237,7 +369,7 @@ const DetailsScreen = ({ navigation }: Props) => {
                 </Text>
               ) : (
                 <TextInput
-                  style={tw`text-lg border border-gray-300 px-2`}
+                  style={tw`text-lg border border-gray-300 rounded-md px-2`}
                   value={breed}
                   onChangeText={setBreed}
                 />
@@ -255,7 +387,7 @@ const DetailsScreen = ({ navigation }: Props) => {
                 </Text>
               ) : (
                 <TextInput
-                  style={tw`text-lg border border-gray-300 px-2`}
+                  style={tw`text-lg border border-gray-300 rounded-md px-2`}
                   value={weight}
                   onChangeText={setWeight}
                 />
@@ -271,7 +403,7 @@ const DetailsScreen = ({ navigation }: Props) => {
                 </Text>
               ) : (
                 <TextInput
-                  style={tw`text-lg border border-gray-300 px-2`}
+                  style={tw`text-lg border border-gray-300 rounded-md px-2`}
                   value={gender}
                   onChangeText={setGender}
                 />
@@ -289,14 +421,145 @@ const DetailsScreen = ({ navigation }: Props) => {
                 </Text>
               ) : (
                 <TextInput
-                  style={tw`text-lg border border-gray-300 px-2`}
+                  style={tw`text-lg border border-gray-300 rounded-md px-2`}
                   value={microchip}
                   onChangeText={setMicrochip}
                 />
               )}
             </View>
+
+
           </View>
         </View>
+
+        <View>
+              <View style={tw`w-full mx-auto pb-3 bg-white rounded-lg mb-5`}>
+                <Text
+                  style={tw`text-xl text-center font-bold p-1 pt-2 underline`}
+                >
+                  Important Contacts
+                </Text>
+                <View style={tw`w-full flex px-6 items-center`}>
+                  {contacts.map((contact, index) => (
+                    <TouchableOpacity
+                      onPress={() => {
+                        setEditContactInfo({
+                          name: contact.name,
+                          phoneNumber: contact.phoneNumber,
+                        });
+                        setEditIndex(index);
+                        setCallOrEditModalOpen(true);
+                      }}
+                      key={index}
+                      style={tw`flex flex-row justify-between items-center py-2`}
+                    >
+                      <Text style={tw`w-1/2 text-base`}>{contact.name}</Text>
+                      <Text style={tw`w-1/2 text-base text-right`}>
+                        {contact.phoneNumber}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                  <TouchableOpacity
+                    onPress={() => {
+                      setEditContactInfo({ name: '', phoneNumber: '' });
+                      setEditIndex(-1);
+                      toggleContactModalOpen();
+                    }}
+                    style={tw`flex-row justify-between bg-[#a457f0] rounded-lg py-2 mt-4`}
+                  >
+                    <Text
+                      style={tw`text-lg font-bold text-white text-right w-full text-center p-1`}
+                    >
+                      Add New Contact
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+
+              <Modal
+                animationType="slide"
+                transparent={true}
+                visible={contactModalOpen}
+                onRequestClose={toggleContactModalOpen}
+              >
+                <View style={tw`flex justify-center items-center mt-64`}>
+                  <View
+                    style={tw`bg-white border-2 border-[#a457f0] rounded-lg w-2/3 pt-10 pb-8 items-center shadow-lg elevation-5`}
+                  >
+                    <TouchableOpacity
+                      style={tw`absolute right-4 top-2`}
+                      onPress={toggleContactModalOpen}
+                    >
+                      <View>
+                        <Icon
+                          name="close"
+                          type="font-awesome"
+                          size={25}
+                          color="#a457f0"
+                        />
+                      </View>
+                    </TouchableOpacity>
+                    <Text
+                      style={tw`text-center text-2xl mb-2 font-semibold text-slate-800`}
+                    >
+                      Add/Edit
+                    </Text>
+
+                    {renderForm()}
+                  </View>
+                </View>
+              </Modal>
+
+              <Modal
+                animationType="slide"
+                transparent={true}
+                visible={callOrEditModalOpen}
+                onRequestClose={toggleCallOrEditModal}
+              >
+                <View style={tw`flex justify-center items-center mt-64`}>
+                  <View
+                    style={tw`bg-white border-2 border-[#a457f0] rounded-lg w-[89%] pt-10 pb-8 items-center shadow-lg elevation-5`}
+                  >
+                    <TouchableOpacity
+                      style={tw`absolute right-4 top-2`}
+                      onPress={toggleCallOrEditModal}
+                    >
+                      <View>
+                        <Icon
+                          name="close"
+                          type="font-awesome"
+                          size={25}
+                          color="#a457f0"
+                        />
+                      </View>
+                    </TouchableOpacity>
+
+                    {<>
+                      <TouchableOpacity
+              style={tw`rounded-xl bg-[#a457f0] p-2 px-8 mx-3`}
+              
+            >
+              <Text style={tw`text-white font-bold text-center text-lg`}>
+                Call Now
+              </Text>
+            </TouchableOpacity>
+
+
+                      <TouchableOpacity 
+                        style={tw`rounded-xl bg-[#f08757] mt-5 p-2 px-8 mx-3`}
+                        onPress={() => {
+                          toggleCallOrEditModal();
+                          toggleContactModalOpen();
+                          console.log("values: ", editContactInfo)
+                        }}
+                      >
+                        <Text style={tw`text-white font-bold text-center text-lg`}>Edit Contact</Text>
+                      </TouchableOpacity>
+                      </>}
+                  </View>
+                </View>
+              </Modal>
+            </View>
 
         {/* <View style={tw`w-full mx-auto pb-3 bg-white rounded-lg mb-5`}>
           <Text style={tw`text-xl text-center font-bold p-1 pt-2 underline`}>
@@ -346,7 +609,11 @@ const DetailsScreen = ({ navigation }: Props) => {
             </View>
           </TouchableOpacity>
         </View>
+                  {/* <Text>Important Documents</Text>
+          <Text>Keep  your important pet documents organized:</Text>
+          <Text>Relevant Documents like vaccination proof, spay/neuter details, adoption records, etc.</Text> */}
       </ScrollView>
+      </TouchableWithoutFeedback>
     </SafeAreaView>
   );
 };

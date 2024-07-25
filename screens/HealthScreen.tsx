@@ -32,6 +32,38 @@ const HealthScreen = ({ navigation }: Props) => {
 
   const [weightModalOpen, setWeightModalOpen] = useState(false);
   const [formattedDate, setFormattedDate] = useState('');
+  const [editMode, setEditMode] = useState(false);
+  const [allergies, setAllergies] = useState(currentPet!.medicalInfo?.allergies);
+  const [medications, setMedications] = useState(currentPet!.medicalInfo?.medications);
+
+   {/* upcoming appointments */}
+
+  const handleSaveChanges = async () => {
+    const updatedPetDetails = {
+      ...currentPet,
+      medicalInfo: {
+        allergies,
+      medications,
+      }
+    };
+
+    // console.log('updated pet details: ', updatedPetDetails);
+
+    dispatch(
+      updateOnePet({
+        petId: currentPet!.id,
+        updatedDetails: updatedPetDetails,
+      })
+    );
+    dispatch(
+      setCurrentPet({
+        ...currentPet,
+        ...updatedPetDetails,
+      })
+    );
+
+    setEditMode(false);
+  };
 
   const getFormattedDate = () => {
     const currentDate = new Date();
@@ -141,9 +173,60 @@ const HealthScreen = ({ navigation }: Props) => {
         </View>
 
         <View style={tw`w-full mx-auto pb-3 bg-white rounded-lg mb-5`}>
+          <Text style={tw`text-xl text-center font-bold p-1 pt-2 pb-3 underline`}>
+            Medical Details
+          </Text>
+          {!editMode ? (
+            <TouchableOpacity onPress={() => setEditMode(true)} style={tw``}>
+              <Icon name="wrench" type="font-awesome" size={20} />
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity 
+              onPress={handleSaveChanges}
+              style={tw``}
+            >
+              <Icon name="check" type="feather" size={20} />
+            </TouchableOpacity>
+          )}
+          <View style={tw`flex items-center gap-y-2 mt-2`}>
+            <View style={tw`flex-row justify-between w-5/6`}>
+              <Text style={tw`text-lg p-1`}>Medications:</Text>
+              {!editMode ? (
+                <Text style={tw`text-lg p-1`}>{medications}</Text>
+              ) : (
+                <TextInput
+                  style={tw`text-lg border border-gray-300 px-2`}
+                  value={medications}
+                  onChangeText={setMedications}
+                  autoCapitalize='none'
+                />
+              )}
+
+            </View>
+            <View style={tw`flex-row justify-between w-5/6`}>
+              <Text style={tw`text-lg text-right text-gray-700 p-1`}>
+                Allergies:
+              </Text>
+              {!editMode ? (
+                <Text style={tw`text-lg p-1`}>
+                  {allergies}
+                </Text>
+              ) : (
+                <TextInput
+                  style={tw`text-lg border border-gray-300 px-2`}
+                  value={allergies}
+                  onChangeText={setAllergies}
+                  autoCapitalize='none'
+                />
+              )}
+            </View>
+          </View>
+        </View>
+
+        <View style={tw`w-full mx-auto pb-3 bg-white rounded-lg mb-5`}>
           <View style={tw`flex items-center gap-y-2`}>
             <Text style={tw`text-xl text-center p-1 font-bold underline`}>
-              Weight Details
+              Weight
             </Text>
             <View style={tw`flex-row justify-between w-5/6`}>
               <Text style={tw`text-lg p-1`}>Current Weight:</Text>

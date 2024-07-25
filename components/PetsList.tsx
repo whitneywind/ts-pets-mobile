@@ -30,7 +30,7 @@ const PetsList = ({ navigation }: any) => {
         contentContainerStyle={tw`rounded-lg mb-3`}
         renderItem={({ item }) => (
           <TouchableOpacity
-            style={tw`mr-5`}
+            style={tw`mr-6`}
             onPress={() => handleSwitchPet(item.id)}
           >
             <View style={tw`bg-white px-5 py-3 rounded-lg shadow-sm`}>
@@ -60,16 +60,16 @@ const PetsList = ({ navigation }: any) => {
         )}
         ListFooterComponent={() => (
           <TouchableOpacity
-            style={tw`mt-6 ml-1`}
+            style={tw`mt-10 ml-4`}
             onPress={() => navigation.navigate("GettingStarted")}
           >
             <Icon
               name="pluscircle"
               type="antdesign"
-              size={30}
+              size={25}
               color="#64748ba1"
             />
-            <Text style={tw`text-gray-500 mt-2`}>Add Pet</Text>
+            {/* <Text style={tw`text-gray-500 mt-1`}>Add Pet</Text> */}
           </TouchableOpacity>
         )}
       />

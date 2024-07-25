@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { useSelector } from 'react-redux';
 import { PetData } from '../typings';
@@ -19,11 +19,12 @@ type Props = {
 function HomeScreen({ navigation }: Props) {
   const petsArray = useSelector((state: RootState) => state.pets.petsArray);
   let currentPet = useSelector((state: RootState) => state.pets.currentPet);
+  const [imgUri, setImgUri] = useState<string | null>(currentPet?.uri || null);
   // console.log('petsArray on homescreen: ', JSON.stringify(petsArray[petsArray.length - 1], null, 2));
   // console.log('current pet', currentPet)
   // console.log('curr pet on home', currentPet?.petName)
 
-  React.useEffect(() => {
+  useEffect(() => {
     // when upgrading to React Navigation 7.0 or higher, "any" below can be replaced by "NavigationRemoveEvent"
     navigation.addListener('beforeRemove', (e: any) => {
       e.preventDefault();
@@ -83,12 +84,11 @@ function HomeScreen({ navigation }: Props) {
       </View>
 
       <View style={tw`w-full flex items-center`}>
-        <TouchableOpacity onPress={() => navigation.navigate('Details')}>
-          {petsArray.length === 1 ? (
+        <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
             <Image
             style={{
-              width: 200,
-              height: 210,
+              width: petsArray.length === 1 ? 300 : 200,
+              height: petsArray.length === 1 ? 300 : 170,
               resizeMode: 'contain',
               borderRadius: 30,
             }}
@@ -100,24 +100,6 @@ function HomeScreen({ navigation }: Props) {
                 : catImg
             }
           />
-          ) : (
-            <Image
-              style={{
-                width: 200,
-                height: 170,
-                resizeMode: 'contain',
-                borderRadius: 30,
-              }}
-              source={
-                currentPet && currentPet.uri
-                  ? { uri: currentPet.uri }
-                  : currentPet!.petType === 'dog'
-                  ? dogImg
-                  : catImg
-              }
-            />
-          )}
-
         </TouchableOpacity>
       </View>
 
@@ -126,7 +108,7 @@ function HomeScreen({ navigation }: Props) {
         <PetsList navigation={navigation} />
       )}
 
-      {petsArray.length === 1 && (
+      {/* {petsArray.length === 1 && (
         <TouchableOpacity
           style={tw`bg-[#6FD5B3] w-[89%] mx-auto rounded-xl py-2`}
           onPress={() => navigation.navigate('GettingStarted')}
@@ -135,7 +117,7 @@ function HomeScreen({ navigation }: Props) {
             Add Pet
           </Text>
         </TouchableOpacity>
-      )}
+      )} */}
     </SafeAreaView>
   );
 }

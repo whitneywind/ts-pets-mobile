@@ -7,31 +7,11 @@ import { Provider } from "react-redux";
 import { store, persistor } from './store';
 import { PersistGate } from "redux-persist/integration/react"
 import GettingStartedScreen from './screens/GettingStartedScreen';
-import DetailsScreen from './screens/DetailsScreen';
+import ProfileScreen from './screens/ProfileScreen';
 import HealthScreen from './screens/HealthScreen';
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import WalkScreen from './screens/WalkScreen';
-import InfoScreen from './screens/InfoScreen';
-
-// type RootStackParamList = {
-//   Landing: string,
-//   Home: string,
-// }
-
-// import AsyncStorage from '@react-native-async-storage/async-storage';
-
-// // Function to clear local storage
-// const clearLocalStorage = async () => {
-//   try {
-//     await AsyncStorage.clear();
-//     console.log('Local storage cleared successfully');
-//   } catch (error) {
-//     console.error('Error clearing local storage:', error);
-//   }
-// };
-
-// // Call the function where needed
-// clearLocalStorage();
+import PlacesScreen from './screens/PlacesScreen';
 
 
 export default function App() {
@@ -46,10 +26,10 @@ export default function App() {
                 <Stack.Screen name="Landing" component={LandingScreen} options={{ headerShown: false }} />
                 <Stack.Screen name="GettingStarted" component={GettingStartedScreen} options={{ headerShown: false }} />
                 <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
-                <Stack.Screen name="Details" component={DetailsScreen} options={{ headerShown: false }} />
+                <Stack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
                 <Stack.Screen name="Walk" component={WalkScreen} options={{ headerShown: false }} />
                 <Stack.Screen name="Health" component={HealthScreen} options={{ headerShown: false }} />
-                <Stack.Screen name="Info" component={InfoScreen} options={{ headerShown: false }} />
+                <Stack.Screen name="Places" component={PlacesScreen} options={{ headerShown: false }} />
               </Stack.Navigator>
             </SafeAreaProvider>
           </GestureHandlerRootView>
@@ -57,22 +37,4 @@ export default function App() {
       </PersistGate>
     </Provider>
   )
-}
-
-// export default function App() {
-//   return (
-//     <View style={styles.container}>
-//       <Text>Open up App.tsx to start working on your app!</Text>
-//       <StatusBar style="auto" />
-//     </View>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#fff',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//   },
-// });
+};
