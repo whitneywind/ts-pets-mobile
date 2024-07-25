@@ -38,7 +38,7 @@ const LandingScreen = ({ navigation }: Props) => {
   return (
     <SafeAreaView style={tw`h-full`}>
       <View style={tw`pt-1 mb-16 w-full`}>
-        <Icon name="dog" type="material-community" size={40} />
+      <Icon name="paw" type="fontisto" size={22} color={'gray'} />
         <Text style={tw`text-center text-xl`}>Pet Place</Text>
       </View>
       <View>

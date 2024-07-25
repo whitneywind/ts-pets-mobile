@@ -38,7 +38,7 @@ const PlacesScreen = ({ navigation }: any) => {
             <View style={tw`flex-1`}>
               <MapView 
                 style={tw`h-full w-full`}
-                provider={PROVIDER_GOOGLE}
+                // provider={PROVIDER_GOOGLE}
                 initialRegion={{
                   latitude: 32.9595,
                   longitude: -117.2653,

@@ -40,7 +40,7 @@ function HomeScreen({ navigation }: Props) {
       <SafeAreaView>
         <View style={tw`mx-auto w-1/2`}>
           <View style={tw`pt-1 mb-5 w-full`}>
-            <Icon name="dog" type="material-community" size={40} />
+            <Icon name="paw" type="fontisto" size={40} />
           </View>
           <Text style={tw`text-4xl text-center mt-16`}>Add a pet now</Text>
           <TouchableOpacity
@@ -58,7 +58,7 @@ function HomeScreen({ navigation }: Props) {
   return (
     <SafeAreaView style={tw`h-full flex gap-2`}>
       <View style={tw`pt-1 w-full`}>
-        <Icon name="dog" type="material-community" size={34} color={'black'} />
+        <Icon name="paw" type="fontisto" size={22} color={'gray'} />
       </View>
       <View
         style={tw`flex flex-row w-full items-center justify-around px-4 mt-3 mb-5`}

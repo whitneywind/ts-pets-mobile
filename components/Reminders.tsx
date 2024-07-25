@@ -12,13 +12,12 @@ const Reminders = ({ navigation, currentPet }: any) => {
       >
         <View style={tw`w-[70%]`}>
           <View style={tw`flex flex-row`}>
-            <Icon name="pill" type="material-community" color="white" />
+            <Icon name="clock" type="feather" color="white" />
             <Text style={tw`text-white text-xl font-bold pb-1 pl-1`}>
               Yearly Checkup
             </Text>
           </View>
           <View style={tw`flex flex-row`}>
-            <Icon name="clock" type="feather" color="white" size={15} />
             <Text style={tw`text-white`}> 9:00 AM • 2/12/2024</Text>
           </View>
         </View>
@@ -29,8 +28,8 @@ const Reminders = ({ navigation, currentPet }: any) => {
         style={tw`flex flex-row justify-between bg-[#53A2FF] rounded-xl items-center pl-3 pr-6 py-5`}
       >
         <View style={tw`w-[70%]`}>
-          <View style={tw`flex flex-row items-center`}>
-            <Icon name="guide-dog" type="foundation" size={40} color="white" />
+          <View style={tw`flex flex-row items-center mb-1`}>
+            <Icon name="paw" type="font-awesome-5" size={20} color="white" />
             <Text style={tw`text-white text-xl font-bold pl-2`}>
               Daily Goal:
             </Text>
@@ -39,22 +38,21 @@ const Reminders = ({ navigation, currentPet }: any) => {
 
              {currentPet.walkGoalMet ? (
                 <View style={tw`flex flex-row`}>
-                  <Icon name="star" type="antdesign" color="white" size={15} />
+                  <Icon name="check" type="feather" color="white" size={15} />
                   <Text style={tw`text-white pr-1`}> You reached today's goal!
                   </Text>
                 </View>
               ) : (
                 <View style={tw`flex flex-row`}>
-                  <Icon name="staro" type="antdesign" color="white" size={15} />
-                  <Text style={tw`text-white pr-1`}> Enter today's walk!
+                  <Text style={tw`text-white`}> Enter today's walk!
                   </Text>
                 </View>
               )
               }
         </View>
         <Icon
-          name="checkbox-marked-outline"
-          type="material-community"
+          name={currentPet.walkGoalMet ? "square" : "check-square"}
+          type="feather"
           color="white"
           size={45}
         />
