@@ -59,6 +59,15 @@ function HomeScreen({ navigation }: Props) {
     <SafeAreaView style={tw`h-full flex gap-2`}>
       <View style={tw`pt-1 w-full`}>
         <Icon name="paw" type="fontisto" size={22} color={'gray'} />
+        <TouchableOpacity
+            style={tw`absolute right-4`}
+            onPress={() => {
+              console.log("touched")
+              navigation.navigate('GettingStarted')
+            }}
+          >
+            <Icon name="plus" type="font-awesome-5" size={22} color={'gray'} />
+          </TouchableOpacity>
       </View>
       <View
         style={tw`flex flex-row w-full items-center justify-around px-4 mt-3 mb-5`}
@@ -76,14 +85,14 @@ function HomeScreen({ navigation }: Props) {
         </View>
 
       </View>
-      <View>
+      <View style={tw`pt-2`}>
         <NavOptions navigation={navigation} />
       </View>
       <View>
         <Reminders navigation={navigation} currentPet={currentPet} />
       </View>
 
-      <View style={tw`w-full flex items-center`}>
+      <View style={tw`w-full flex items-center pt-4`}>
         <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
             <Image
             style={{

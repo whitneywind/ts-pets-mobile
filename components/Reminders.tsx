@@ -5,7 +5,7 @@ import { Icon } from "@rneui/base";
 const Reminders = ({ navigation, currentPet }: any) => {
 
   return (
-    <View style={[tw`w-[89%] mx-auto rounded-xl mt-1`]}>
+    <View style={[tw`w-[89%] mx-auto rounded-xl`]}>
       <TouchableOpacity
         onPress={() => navigation.navigate("Health")}
         style={tw`flex flex-row justify-between bg-[#6FD5B3] rounded-xl items-center pl-3 pr-6 py-5 mb-6`}
