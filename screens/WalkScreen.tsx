@@ -25,6 +25,14 @@ type Props = {
   navigation: any;
 };
 
+type CalendarDay = {
+  dateString: string;
+  day: number;
+  month: number;
+  timestamp: number;
+  year: number;
+}
+
 const WalkScreen = ({ navigation }: Props) => {
   const dispatch = useDispatch();
 
@@ -40,23 +48,24 @@ const WalkScreen = ({ navigation }: Props) => {
 
   const [selectedDate, setSelectedDate] = useState('');
 
-  for (let i = 7, j = 0; i > 0; i--, j++) {
-    const currentDate = new Date();
-    currentDate.setDate(currentDate.getDate() - i + 1);
-    const year = currentDate.getFullYear();
-    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-    const day = String(currentDate.getDate()).padStart(2, '0');
-    const formattedDate = `${year}-${month}-${day}`;
-    lastSevenDates.push(formattedDate);
+  const setupInitialWalkData = () => {
+    for (let i = 7, j = 0; i > 0; i--, j++) {
+      const currentDate = new Date();
+      currentDate.setDate(currentDate.getDate() - i + 1);
+      const formattedDate = currentDate.toISOString().split('T')[0];
+      lastSevenDates.push(formattedDate);
 
-    // get data for this date if it exists
-    if (!currentPetWalkData) {
-      continue;
-    } else if (currentPetWalkData[formattedDate]) {
-      const walkingTime = parseInt(currentPetWalkData[formattedDate]);
-      dataFromLastSevenDates[j] = walkingTime;
-    }
+      // get data for this date if it exists
+      if (!currentPetWalkData) {
+        continue;
+      } else if (currentPetWalkData[formattedDate]) {
+        const walkingTime = parseInt(currentPetWalkData[formattedDate]);
+        dataFromLastSevenDates[j] = walkingTime;
+      }
+    };
   }
+
+  setupInitialWalkData();
 
   let walkingAvg = Math.floor(
     dataFromLastSevenDates.reduce((acc, curr) => {
@@ -73,15 +82,14 @@ const WalkScreen = ({ navigation }: Props) => {
 
   useEffect(() => {
     getAvg();
+    setSelectedDate(lastSevenDates[6])
   }, []);
 
-  const handleSubmit = (values: any) => {
-    // TO-DO: refactor to use for both modals
+  const handleSubmitValues = (values: any) => {
     const petId = currentPet!.id;
     let updatedDetails: any;
 
     if (updatingGoal) {
-      // update for goal
       console.log('values: ', values);
       updatedDetails = {
         walkGoal: parseInt(values.walkGoal),
@@ -125,14 +133,15 @@ const WalkScreen = ({ navigation }: Props) => {
           walkLength: '',
         }}
         onSubmit={(values) => {
-          handleSubmit(values);
+          handleSubmitValues(values);
           setWalkModalOpen(!walkModalOpen);
         }}
       >
         {({ handleChange, handleBlur, handleSubmit, values }) => (
           <View>
             <Calendar
-              onDayPress={(day) => {
+              onDayPress={(day: CalendarDay) => {
+                console.log(day)
                 setSelectedDate(day.dateString);
                 handleChange('walkDate')(day.dateString);
               }}
@@ -172,7 +181,7 @@ const WalkScreen = ({ navigation }: Props) => {
           walkGoal: currentPet!.walkGoal,
         }}
         onSubmit={(values) => {
-          handleSubmit(values);
+          handleSubmitValues(values);
           setGoalModalOpen(!goalModalOpen);
         }}
       >
